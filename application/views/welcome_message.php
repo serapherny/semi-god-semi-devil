@@ -62,6 +62,19 @@
 		border: 1px solid #D0D0D0;
 		-webkit-box-shadow: 0 0 8px #D0D0D0;
 	}
+	
+	.halfpage-height{
+	    height: 500px;
+	    width: auto; 
+	}
+	
+	.mid{
+	    margin: 0px auto;
+	}
+	
+	.whole-width{
+	    width: 100%;
+	}
 	</style>
 </head>
 <body>
@@ -70,7 +83,9 @@
 	<h1>欢迎来到拇指姑娘。网站和应用建设中。</h1>
 
 	<div id="body">
-	  <img src="<?php echo $static_img?>/muzhi.jpeg"/>
+	  <div class="whole-width">
+	     <img class="halfpage-height mid" src="<?php echo $static_img?>/muzhi.jpeg"/>
+	  </div>
     </div>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
