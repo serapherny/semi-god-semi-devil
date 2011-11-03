@@ -99,7 +99,7 @@ if (defined('ENVIRONMENT'))
 	// $routing['directory'] = '';
 
 	// The controller class file name.  Example:  Mycontroller
-	// $routing['controller'] = '';
+	// $routing['controller'] = 'test';
 
 	// The controller function you wish to be called.
 	// $routing['function']	= '';
