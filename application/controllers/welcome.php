@@ -4,9 +4,9 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
-	    $data['page_title'] = '拇指姑娘';
-	    $data['static_img'] = 'static/images';
-		$this->load->view('welcome_message', $data);
+	    $this->load->view('header', array('page_title'=>'欢迎（网站建设中）'));
+		$this->load->view('welcome_message');
+		$this->load->view('footer');
 	}
 }
 

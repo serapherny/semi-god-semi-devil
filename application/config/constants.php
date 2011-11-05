@@ -36,6 +36,17 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+/*
+|--------------------------------------------------------------------------
+| some important path
+|--------------------------------------------------------------------------
+|
+*/
+define('LIB',         APPPATH.'libraries/');
+define('STATIC_DIR',  'static/');
+define('IMG',         STATIC_DIR.'images/');
+define('CSS',         STATIC_DIR.'css/');
+define('JS',          STATIC_DIR.'js');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
