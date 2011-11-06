@@ -43,7 +43,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 |
 */
 define('LIB',         APPPATH.'libraries/');
-define('STATIC_DIR',  'static/');
+define('STATIC_DIR',  '/semi-god-semi-devil/static/');
 define('IMG',         STATIC_DIR.'images/');
 define('CSS',         STATIC_DIR.'css/');
 define('JS',          STATIC_DIR.'js');

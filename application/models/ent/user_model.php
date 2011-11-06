@@ -17,6 +17,30 @@ class User_model extends CI_Model {
         array('user'=> $chao->set_nickname('Chao'))
       );         
   }
+  
+  public function add_new_user($user) {
+    if (!$user instanceof User) {
+      log_message('error', 'Adding an invalid user.');
+    } else {
+      
+    }
+  }
+  
+  public function update_user($user) {
+    if (!$user instanceof User) {
+      log_message('error', 'Adding an invalid user.');
+    } else {
+  
+    }
+  }
+  
+  public function delete_user($id) {
+    if (!$user instanceof User) {
+      log_message('error', 'Adding an invalid user.');
+    } else {
+  
+    }
+  }
 }
 
 /* End of file user_model.php */

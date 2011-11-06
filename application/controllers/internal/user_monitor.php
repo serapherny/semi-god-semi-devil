@@ -14,6 +14,21 @@ class User_monitor extends CI_Controller {
   	$this->load->view('internal/user_monitor', $data);
   	$this->load->view('footer');
   }
+  
+  public function create_user() {
+    $keybox = array('ios_v0.1'=>'semi-god-semi-devil-v0.1-acdjiac5tq-ios',
+                    'android_v0.1'=>'semi-god-semi-devil-v0.1-acdjiac5tq-android');
+    
+    $udid = $this->input->post('UDID');
+    $key = $this->input->post('KEY');
+    $content = $this->input->post('CONTENT');
+    $client = array_search($key, $keybox);
+    
+    echo "UDID got: $udid <br/>";
+    echo "KEY got: $key <br/>";
+    echo "Client is: $client <br/>";
+    echo "CONTENT got: $content <br/>";
+  }
 }
 
 /* End of file user_monitor.php */
