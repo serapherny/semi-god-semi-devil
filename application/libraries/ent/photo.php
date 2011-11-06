@@ -6,7 +6,7 @@ class Photo extends Ent {
   
   private
     $creater_ = NOT_SET,
-    $source_file = NOT_SET,
+    $source_file_id = NOT_SET,
     $image_info = NOT_SET,
     $items_ = array(),
     $tags_ = array();

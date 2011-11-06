@@ -5,9 +5,10 @@ require_once LIB.'ent/device.php';
 
 class User extends Ent {
  
-  private 
-    $nickname_ = NOT_SET,
+  private
     $email_addr_ = NOT_SET,
+    $nickname_ = NOT_SET,
+    $profile_photo = NOT_SET,
     $last_device_ = NOT_SET,
     $device_list_ = array();
   
