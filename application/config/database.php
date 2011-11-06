@@ -64,5 +64,22 @@ $db['development']['autoinit'] = TRUE;
 $db['development']['stricton'] = FALSE;
 
 
+$db['product']['hostname'] = 'localhost';
+$db['product']['username'] = 'admin_semi';
+$db['product']['password'] = '29282317aA_';
+$db['product']['database'] = 'semi';
+$db['product']['dbdriver'] = 'mysql';
+$db['product']['dbprefix'] = 'semi_';
+$db['product']['pconnect'] = TRUE;
+$db['product']['db_debug'] = TRUE;
+$db['product']['cache_on'] = TRUE;
+$db['product']['cachedir'] = APPPATH.'cache/';
+$db['product']['char_set'] = 'utf8';
+$db['product']['dbcollat'] = 'utf8_general_ci';
+$db['product']['swap_pre'] = '';
+$db['product']['autoinit'] = TRUE;
+$db['product']['stricton'] = FALSE;
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */
