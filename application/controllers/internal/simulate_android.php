@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Test_user_rpc extends CI_Controller {
+class Simulate_android extends CI_Controller {
   function __construct() {
     parent::__construct();
   }
   
-  public function index() {
+  public function create() {
     $this->load->helper('url');
     $server_url = site_url('rpcs/user_rpc');
-    echo $server_url . '<br/>';
+    echo 'Submit to '.$server_url . '<br/>';
     
     $this->load->library('xmlrpc');
     
@@ -17,16 +17,16 @@ class Test_user_rpc extends CI_Controller {
     //$this->xmlrpc->set_debug(TRUE);
     
     $content = array(
-                     'nickname'=>'chao2',
-                     'password'=>'chao2',
-                     'email_addr'=>'chao2@gmail.com'
+                     'nickname'=> $this->input->post('nickname'),
+                     'password'=> $this->input->post('password'),
+                     'email_addr'=> $this->input->post('email_addr')
                );
     
     $request = array(
                   array(
                     // Param 0
                     array(
-                          'UDID'=>'1234567',
+                          'UDID'=>'simu_android',
                           'KEY'=>'semi-god-semi-devil-v0.1-acdjiac5tq-android',
                           'CONTENT'=> array($content, 'struct')
                          ),
@@ -46,5 +46,5 @@ class Test_user_rpc extends CI_Controller {
 }
 
 
-/* End of file test_user_rpc.php */
-/* Location: ./application/controllers/test/test_user_rpc.php */
+/* End of file simulate_android.php */
+/* Location: ./application/controllers/internal/simulate_android.php */

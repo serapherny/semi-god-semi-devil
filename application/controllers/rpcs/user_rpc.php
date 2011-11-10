@@ -13,6 +13,7 @@ class User_rpc extends CI_Controller {
     $this->load->library('xmlrpcs');
   
     $config['functions']['create_user'] = array('function' => 'User_rpc.create_user');
+    $config['functions']['update_user'] = array('function' => 'User_rpc.update_user');
     $config['object'] = $this;
   
     $this->xmlrpcs->initialize($config);
@@ -20,6 +21,7 @@ class User_rpc extends CI_Controller {
   }
   
   public function process($request, $cmd) {
+    
     $this->load->library('xmlrpc');
     $parameters = $request->output_parameters();
     
@@ -32,24 +34,16 @@ class User_rpc extends CI_Controller {
       $action_result = 'failed : no such command.';
       
       switch($cmd) {
+        /* 
+         * ==========================================================
+         * RPC Call of creating a new user.
+         * ==========================================================
+         */
         case 'create_user': 
+          
           $user = new User();
-          
-          if (isset($content['nickname'])) {
-            $user->set_nickname($content['nickname']);
-          }
-          
-          if (isset($content['email_addr'])) {
-            $user->set_email_addr($content['email_addr']);
-          }
-
-          if (isset($content['password'])) {
-            $user->set_password($content['password']);
-          }
-          
-          $user->add_device($content['UDID'])
-               ->set_last_device($content['UDID']);
-
+          $blacklist = array();
+          $user->load_array($content, $blacklist);
           $valid = $user->validateNewUserData();
 
           if (!$valid) {
@@ -60,6 +54,18 @@ class User_rpc extends CI_Controller {
           $this->load->model('ent/user_model', 'user_model');
           $action_result = $this->user_model->create_user($user);
           break;
+          
+        /*
+         * ==========================================================
+         * RPC Call of updating an existing user.
+         * ==========================================================
+         */
+        case 'update_user':      
+
+          $user = new User();
+          // We definitely don't want to update these info.
+          $blacklist = array('sid', 'create_time', 'user_info');
+          $user->load_array($content, $blacklist);
           
         default:;
       }

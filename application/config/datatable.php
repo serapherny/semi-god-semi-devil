@@ -20,6 +20,11 @@ $config['user_table_fields']	=  array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '255' 
                           ),
+                          
+  'password'      => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '255' 
+                          ),
                      
   'email_addr'    => array(
                            'type'        => 'VARCHAR',

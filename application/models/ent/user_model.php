@@ -12,7 +12,8 @@ class User_model extends CI_Model {
     $result_set = array();
     $query = $this->db->get('user', $limit, $offset);
     foreach ($query->result_array() as $row) {
-      $user = $this->rec_to_user($row);
+      $user = new User();
+      $user->load_array($row, $blacklist = array());
       $result_set[] = array('user'=>$user);
     }
     return $result_set;
@@ -44,32 +45,15 @@ class User_model extends CI_Model {
         return 'failed : email exists in database.';
       }
       // Here we are sure that insert can proceed.
-      $user_rec = $this->user_to_rec($user);
+      $blacklist = array();
+      $user->set_create_time(now());
+      $user_rec = $user->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('user', $user_rec);
       return 'suc';
     }
   }
   
-  public function user_to_rec($user) {
-    $user_rec = array(
-            'sid'        => $user->get_sid(),
-            'nickname'   => $user->get_nickname(),
-            'email_addr' => $user->get_email_addr(),
-            'last_device'=> $user->get_last_device(),
-            'user_info'  => $user->compress_user_info()
-    );
-    return $user_rec;
-  }
-  
-  public function rec_to_user($user_rec) {
-    $user = new User();
-    $user->set_sid($user_rec['sid'])
-         ->set_email_addr($user_rec['email_addr'])
-         ->set_last_device($user_rec['last_device'])
-         ->set_nickname($user_rec['nickname'])
-         ->decompress_user_info($user_rec['user_info']);
-    return $user;
-  }
+
 }
 
 /* End of file user_model.php */

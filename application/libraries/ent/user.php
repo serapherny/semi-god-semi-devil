@@ -11,6 +11,7 @@ class User extends Ent {
     $password_ = NOT_SET,
     $profile_photo = NOT_SET,
     $last_device_ = NOT_SET,
+    $create_time_ = NOT_SET,
     $device_list_ = array();
   
   public function __construct() {
@@ -64,6 +65,10 @@ class User extends Ent {
     return $this;
   }
   
+  public function get_device_list() {
+    return $this->device_list_;
+  }
+  
   public function set_last_device($device_id) {
     if (Device::is_device_id($device_id)) {
       $this->last_device_ = $device_id;
@@ -77,11 +82,111 @@ class User extends Ent {
     return $this->last_device_;
   }
   
+  public function set_create_time($create_time) {
+    $this->create_time_ = $create_time;
+    return $this;
+  }
+  
+  public function get_create_time() {
+    return $this->create_time_;
+  }
+  
   public function compress_user_info() {
     return 'compressed';
   }
   
   public function decompress_user_info() {
+    return $this;
+  }
+  
+  public function to_array($compressed, 
+                           $filter_null = true, 
+                           $blacklist = array()) {
+    $user_rec = array();
+    
+    if (!isset($blacklist['sid']) && 
+            (!$filter_null || $this->get_sid() !== NOT_SET)) {
+      $user_rec['sid'] = $this->get_sid();
+    }
+    
+    if (!isset($blacklist['nickname']) &&
+            (!$filter_null || $this->get_nickname() !== NOT_SET)) {
+      $user_rec['nickname'] = $this->get_nickname();
+    }
+
+    if (!isset($blacklist['email_addr']) &&
+            (!$filter_null || $this->get_email_addr() !== NOT_SET)) {
+      $user_rec['email_addr'] = $this->get_email_addr();
+    }
+
+      if (!isset($blacklist['password']) &&
+            (!$filter_null || $this->get_password() !== NOT_SET)) {
+      $user_rec['password'] = $this->get_password();
+    } 
+    
+    if (!isset($blacklist['last_device']) &&
+            (!$filter_null || $this->get_last_device() !== NOT_SET)) {
+      $user_rec['last_device'] = $this->get_last_device();
+    }
+
+    if ($compressed) {
+      if (!isset($blacklist['user_info'])) {
+        $user_rec['user_info'] = $this->compress_user_info();
+        
+        if ($filter_null && $user_rec['user_info'] === NOT_SET) {
+          unset($user_rec['user_info']);
+        }
+      }
+    } else {
+      if (!isset($blacklist['create_time']) &&
+              (!$filter_null || $this->get_create_time() !== NOT_SET)) {
+         $user_rec['create_time'] = $this->get_create_time();
+      }
+      
+      if (!isset($blacklist['device_list']) &&
+              (!$filter_null || $this->get_device_list() !== array())) {
+        $user_rec['device_list'] = $this->get_device_list();
+      }
+    }
+    
+    return $user_rec;
+  }
+  
+  public function load_array($user_rec, $blacklist = array()) {
+    
+    if (!isset($blacklist['sid']) && isset($user_rec['sid'])) {
+      $this->set_sid($user_rec['sid']);
+    }
+    
+    if (!isset($blacklist['nickname']) && isset($user_rec['nickname'])) {
+      $this->set_nickname($user_rec['nickname']);
+    }
+    
+    if (!isset($blacklist['email_addr']) && isset($user_rec['email_addr'])) {
+      $this->set_email_addr($user_rec['email_addr']);
+    }
+    
+    if (!isset($blacklist['password']) && isset($user_rec['password'])) {
+      $this->set_password($user_rec['password']);
+    }
+    
+    if (!isset($blacklist['last_device']) && isset($user_rec['last_device'])) {
+      $this->set_last_device($user_rec['last_device']);
+    }
+    
+    if (!isset($blacklist['UDID']) && isset($user_rec['UDID'])) {
+      $this->add_device($user_rec['UDID'])
+           ->set_last_device($user_rec['UDID']);
+    }
+    
+    if (!isset($blacklist['user_info']) && isset($user_rec['user_info'])) {
+      $this->decompress_user_info($user_rec['user_info']);
+    }
+    
+    if (!isset($blacklist['create_time']) && isset($user_rec['create_time'])) {
+      $this->set_create_time($user_rec['create_time']);
+    }
+    
     return $this;
   }
 }
