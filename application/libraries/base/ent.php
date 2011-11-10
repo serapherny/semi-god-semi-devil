@@ -12,6 +12,7 @@ class Ent {
   
   public function set_sid($sid) {
     $this->sid_ = $sid;
+    return $this;
   }
   
   public function get_sid() {

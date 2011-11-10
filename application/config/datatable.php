@@ -14,8 +14,8 @@ $config['user_table_fields']	=  array(
   'sid'           => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '16'
-                          ),
-
+                          ),   
+                               
   'nickname'      => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '255' 
