@@ -12,11 +12,13 @@ class Gatekeeper {
     // Build the $keybox.
     $this->keybox_ = array(
       'ios_v0.1'=>'semi-god-semi-devil-v0.1-acdjiac5tq-ios',
-      'android_v0.1'=>'semi-god-semi-devil-v0.1-acdjiac5tq-android');
+      'android_v0.1'=>'semi-god-semi-devil-v0.1-acdjiac5tq-android',
+      'simu_android'=>'semi-god-semi-devil-v0.1-acdjiac5tq-simulate-android');
     
     $this->main_versions_ = array(
       'ios_v0.1'=>1, 
-      'android_v0.1'=>1);
+      'android_v0.1'=>1,
+      'simu_android'=>1);
   }
   
   public function validatePost($parameters) {
@@ -24,7 +26,6 @@ class Gatekeeper {
     if (isset($parameters['UDID']) &&
         isset($parameters['KEY']) &&
         isset($parameters['CONTENT'])) {
-      error_log('OK');
       $udid = $parameters['UDID'];
       $key = $parameters['KEY'];
       $content = $parameters['CONTENT'];

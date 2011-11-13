@@ -2,19 +2,18 @@
 <div class="float_r color_red width_section padding_as borders_s borderc_gray"><?php print_r($action_result);?></div>
 <?php endif;?>
 
-<h2 class="clr_l">已有用户列表</h2>
+<h2 class="clr_l">已有照片列表</h2>
 <ul>
-  <?php foreach($user_list as $user_rec):?>
-    <li><?php $this->load->view('ent/user_li', $user_rec);?></li>
+  <?php foreach($photo_list as $photo_entry):?>
+    <li><?php $this->load->view('ent/photo_li', $photo_entry);?></li>
   <?php endforeach;?>
 </ul>
 
-<?php echo form_open(uri_string()); ?>
-	用户名：<input type="text" name="nickname" />
-	密码：<input type="text" name="password" />
-	验证密码：<input type="text" name="passconf" />
-	邮箱：<input type="text" name="email_addr"/>
-	<button type="submit">创建用户</button>
+<?php echo form_open_multipart(uri_string());?>
+<input type="file" name="userfile" size="20" />
+<br /><br />
+以用户ID:<input type="text" name="usid" size="15" />上传 - 
+<input type="submit" value="upload" />
 </form>
 
 <div class="margin_tb height_bar">
@@ -23,6 +22,5 @@
 	<div class="float_l margin_lb"><?php echo anchor(uri_string(), '刷新本页');?></div>
 </form>
 </div>
-
 
 

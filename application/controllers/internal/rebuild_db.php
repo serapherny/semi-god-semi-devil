@@ -27,7 +27,7 @@ class Rebuild_db extends CI_Controller {
     $this->dbforge->drop_table($table_name);
     $this->dbforge->create_table($table_name);
     
-    $this->notify('info', '成功建立新用户信息表!'); 
+    $this->notify('info', "成功建立 $table_name 表!"); 
 
     // Read out the field meta info from the table for printing.
     $fields_info = $this->db->field_data($table_name);
@@ -46,9 +46,13 @@ class Rebuild_db extends CI_Controller {
     $this->load->library('table');
     $content = $this->table->generate($field_info_list);
     
+    $this->load->helper('url');
     // Print it plain.
-    $this->load->view('base/div', array('class'=>'', 'content'=>$content));
+    $this->load->view('base/div', 
+        array('class'=>'float_r', 
+              'content'=> anchor(site_url('internal/'.$table_name.'_monitor'), "$table_name 管理")));
     
+    $this->load->view('base/div', array('class'=>'', 'content'=>$content));
   }
   
   public function rebuild_db() {
@@ -79,6 +83,9 @@ class Rebuild_db extends CI_Controller {
     
     // Create user table.
     $this->rebuild_table('user_table', 'user');
+    
+    // Create photo table.
+    $this->rebuild_table('photo_table', 'photo');
   }
   
   public function index() {
