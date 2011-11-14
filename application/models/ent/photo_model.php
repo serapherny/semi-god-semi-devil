@@ -39,7 +39,7 @@ class Photo_model extends CI_Model {
       
       $map = directory_map('./photos/', 1);
       if (!in_array($date_dir, $map)) {
-        mkdir('./photos/'.$date_dir, 777);
+        mkdir('./photos/'.$date_dir);
       }
       
       $written = $photo->save_binary_to_file(
