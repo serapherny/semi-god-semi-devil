@@ -91,7 +91,7 @@ $config['charset'] = 'UTF-8';
 | setting this variable to TRUE (boolean).  See the user guide for details.
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 
 /*
@@ -180,7 +180,9 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+// Changed to MY_log
+//$config['log_threshold'] = 0;
+$config['log_threshold'] = 'debug,info,warning,error';
 
 /*
 |--------------------------------------------------------------------------
@@ -191,7 +193,20 @@ $config['log_threshold'] = 0;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+// Changed to MY_log
+//$config['log_path'] = '';
+
+$config['log_routes'] = array(
+          // 将error,warning级别的日志保存到文件
+                  'file'=>array(
+                          'log_path'=>'/'.realpath(APPPATH.'logs'),
+                          'log_levels'=>'error,warning,rpc',
+          ),
+          // 将 debug,info,warning,error 级别的日志输出到firephp
+                  'firephp'=>array(
+                          'log_levels'=>'debug,info,warning,error',
+          )
+);
 
 /*
 |--------------------------------------------------------------------------

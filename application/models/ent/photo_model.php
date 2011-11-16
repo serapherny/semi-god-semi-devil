@@ -19,8 +19,10 @@ class Photo_model extends CI_Model {
     return $result_set;
   }
   
-  public function upload_photo($photo) {
+  public function upload_photo($photo, &$response_content) {
 
+    $response_content = array();
+    
     if (!$photo instanceof Photo) {
       return 'failed : not a valid instance of Photo.';
     } else {
@@ -49,6 +51,8 @@ class Photo_model extends CI_Model {
         return 'failed: not able to file:'.
                $file_path.'/'.$file_name.$file_ext;
       }
+      
+      $response_content['file_path'] = $file_path.'/'.$file_name.$file_ext;
       
       $blacklist = array('binary');
       

@@ -51,7 +51,7 @@ class Photo_rpc extends CI_Controller {
           }
           
           $this->load->model('ent/photo_model', 'photo_model');
-          $action_result = $this->photo_model->upload_photo($photo);
+          $action_result = $this->photo_model->upload_photo($photo, $response_content);
           break;
           
         /*
@@ -73,7 +73,7 @@ class Photo_rpc extends CI_Controller {
     
     $response = array(
       array('action_result' => $action_result,
-            'content' => $content),
+            'content' => array($response_content, 'struct')),
       'struct');
     
     return $this->xmlrpc->send_response($response);

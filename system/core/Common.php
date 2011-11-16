@@ -349,12 +349,10 @@ if ( ! function_exists('log_message'))
 	function log_message($level = 'error', $message, $php_error = FALSE)
 	{
 		static $_log;
-
-		if (config_item('log_threshold') == 0)
-		{
+		
+		if (config_item('log_threshold') === 0) {
 			return;
 		}
-
 		$_log =& load_class('Log');
 		$_log->write_log($level, $message, $php_error);
 	}

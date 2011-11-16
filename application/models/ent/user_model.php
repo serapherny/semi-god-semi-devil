@@ -35,8 +35,11 @@ class User_model extends CI_Model {
     }
   }
   
-  public function create_user($user) {
-  if (!$user instanceof User) {
+  public function create_user($user, &$response_content) {
+    
+    $response_content = array();
+    
+    if (!$user instanceof User) {
       return 'failed : not a valid instance of User.';
     } else {
       $this->db->where('email_addr', $user->get_email_addr());
@@ -49,6 +52,7 @@ class User_model extends CI_Model {
       $user->set_create_time(now());
       $user_rec = $user->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('user', $user_rec);
+      
       return 'suc';
     }
   }

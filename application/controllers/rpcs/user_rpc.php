@@ -9,6 +9,7 @@ class User_rpc extends CI_Controller {
   }
   
   public function index() {
+    log_message('warning', 'user rpc called.');
     $this->load->library('xmlrpc');
     $this->load->library('xmlrpcs');
   
@@ -24,7 +25,7 @@ class User_rpc extends CI_Controller {
     
     $this->load->library('xmlrpc');
     $parameters = $request->output_parameters();
-    
+    log_message('warning', 'rpc request: '.json_encode($parameters));
     $action_result = 'failed : not passing gatekeeper.';
     
     $gatekeeper = new Gatekeeper();
@@ -52,7 +53,7 @@ class User_rpc extends CI_Controller {
           }
           
           $this->load->model('ent/user_model', 'user_model');
-          $action_result = $this->user_model->create_user($user);
+          $action_result = $this->user_model->create_user($user, $response_content);
           break;
           
         /*
@@ -70,10 +71,11 @@ class User_rpc extends CI_Controller {
         default:;
       }
     }
-    
+    log_message('warning', 'user rpc action result: '.$action_result);
+    log_message('warning', 'user rpc response: '.json_encode($response_content));
     $response = array(
       array('action_result' => $action_result,
-            'content' => $content),
+            'content' => array($response_content, 'struct')),
       'struct');
     
     return $this->xmlrpc->send_response($response);
