@@ -31,7 +31,6 @@ class User_model extends CI_Model {
     if (!$user instanceof User) {
       log_message('error', 'Adding an invalid user.');
     } else {
-  
     }
   }
   
@@ -97,6 +96,8 @@ class User_model extends CI_Model {
       $user_rec = $user->to_array($compressed = true, $filter_null = false, $whitelist, true);
       $this->db->where('email_addr', $user->get_email_addr());
       $this->db->update('user', $user_rec);
+      
+      return 'suc';
     }
   }
 }

@@ -68,6 +68,7 @@ class Photo_model extends CI_Model {
       
       $photo_entry = $photo->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('photo', $photo_entry);
+      
       return 'suc';
     }
   }

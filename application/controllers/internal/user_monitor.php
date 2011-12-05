@@ -43,6 +43,7 @@ class User_monitor extends CI_Controller {
   public function user_data() {
     $this->load->library('form_validation');
     // Check if the fields have been fulfilled.
+    $this->form_validation->set_rules('sid_data', '用户名');
     if ($this->form_validation->run() == TRUE ) {
       $user_list = explode(',', $this->input->post('sid_data'));
       $content = array('user_list'=> array($user_list, 'array'));

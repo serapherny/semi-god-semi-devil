@@ -59,8 +59,6 @@ $config['user_table_fields']	=  array(
 $config['user_table_primary_keys'] = array();
 $config['user_table_keys'] = array('email_addr');
 
-
-
 /*
 |--------------------------------------------------------------------------
 | config semi_photo fields configuration.
@@ -108,3 +106,53 @@ $config['photo_table_fields']	=  array(
 
 $config['photo_table_primary_keys'] = array();
 $config['photo_table_keys'] = array();
+
+
+/*
+|--------------------------------------------------------------------------
+| config semi_feed fields configuration.
+|--------------------------------------------------------------------------
+|
+*/
+$config['feed_table_fields']	=  array(
+
+  'sid'           => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+                          ),
+
+  'file_path'     => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '255' 
+                          ),
+
+  'file_name'     => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '255' 
+                          ),
+  'file_ext'      => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '255' 
+                          ),
+
+  'author'        => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16',
+                           'null'        => TRUE
+                          ),
+
+// All other information that cannot be used as a search key.
+// Stored using JSON in this field, including:
+// create_time,
+// file_type,
+// image_size,
+// image_file_length, ...
+  'photo_info'     => array(
+                           'type'        => 'TEXT',
+                           'null'	     => TRUE
+)
+);
+
+$config['photo_table_primary_keys'] = array();
+$config['photo_table_keys'] = array();
+

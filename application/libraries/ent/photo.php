@@ -93,11 +93,11 @@ class Photo extends Ent {
     return $this->create_time_;
   }
   
-  public function compress_photo_info() {
+  public function get_photo_info() {
     return 'compressed';
   }
   
-  public function decompress_photo_info() {
+  public function set_photo_info() {
     return $this;
   }  
   
@@ -108,92 +108,35 @@ class Photo extends Ent {
                     'create_time');
     
     foreach ($fields as $field) {
-      $lock[$field] = !in_array($field, $blacklist) ^ $whitelist;
+      $lock = !in_array($field, $blacklist) ^ $whitelist;
+      if ($lock && isset($photo_entry[$field])) {
+        $setter = 'set_'.$field;
+        $this->$setter($photo_entry[$field]);
+      }
     }
-    
-    if ($lock['sid'] && isset($photo_entry['sid'])) {
-      $this->set_sid($photo_entry['sid']);
-    }
-
-    if ($lock['file_path'] && isset($photo_entry['file_path'])) {
-      $this->set_file_path($photo_entry['file_path']);
-    }
-
-    if ($lock['file_name'] && isset($photo_entry['file_name'])) {
-      $this->set_file_name($photo_entry['file_name']);
-    }
-    
-    if ($lock['file_ext'] && isset($photo_entry['file_ext'])) {
-      $this->set_file_ext($photo_entry['file_ext']);
-    }
-
-    if ($lock['author'] && isset($photo_entry['author'])) {
-      $this->set_author($photo_entry['author']);
-    }
-    
-    if ($lock['binary'] && isset($photo_entry['binary'])) {
-      $this->set_binary($photo_entry['binary']);
-    }
-
-    if ($lock['photo_info'] && isset($photo_entry['photo_info'])) {
-      $this->decompress_photo_info($photo_entry['photo_info']);
-    }
-
-    if ($lock['create_time'] && isset($photo_entry['create_time'])) {
-      $this->set_create_time($photo_entry['create_time']);
-    }
-
     return $this;
   }
 
   public function to_array($compressed,
                            $filter_null,
-                           $blacklist) {
-    
-    $fields = array('sid', 'file_path', 'file_name', 'file_ext',
-                    'author', 'binary', 'photo_info',
-                    'create_time');
+                           $blacklist, 
+                           $whitelist = false) {
+    if ($compressed) {
+      $fields = array('sid', 'file_path', 'file_name', 'file_ext',
+                      'author', 'binary', 'photo_info');
+    } else {
+      $fields = array('sid', 'file_path', 'file_name', 'file_ext',
+                      'author', 'binary', 'create_time');
+    }
     
     foreach ($fields as $field) {
-      $lock[$field] = !in_array($field, $blacklist) ^ $whitelist;
-    }
-    
-    $photo_entry = array();
-
-    if ($lock['sid'] && (!$filter_null || $this->get_sid() !== NOT_SET)) {
-      $photo_entry['sid'] = $this->get_sid();
-    }
-
-    if ($lock['file_path'] && (!$filter_null || $this->get_file_path() !== NOT_SET)) {
-      $photo_entry['file_path'] = $this->get_file_path();
-    }
-
-    if ($lock['file_name'] && (!$filter_null || $this->get_file_name() !== NOT_SET)) {
-      $photo_entry['file_name'] = $this->get_file_name();
-    }
-    
-    if ($lock['file_ext'] && (!$filter_null || $this->get_file_ext() !== NOT_SET)) {
-      $photo_entry['file_ext'] = $this->get_file_ext();
-    }
-
-    if ($lock['author'] && (!$filter_null || $this->get_author() !== NOT_SET)) {
-      $photo_entry['author'] = $this->get_author();
-    }
-
-    if ($compressed) {
-      if ($lock['photo_info']) {
-        $photo_entry['photo_info'] = $this->compress_photo_info();
-
-        if ($filter_null && $photo_entry['photo_info'] === NOT_SET) {
-          unset($photo_entry['photo_info']);
-        }
-      }
-    } else {
-      if ($lock['create_time'] && (!$filter_null || $this->get_create_time() !== NOT_SET)) {
-        $photo_entry['create_time'] = $this->get_create_time();
+      $lock = !in_array($field, $blacklist) ^ $whitelist;
+      $getter = 'get_'.$field;
+      if ($lock && (!$filter_null || $this->$getter() !== NOT_SET)) {
+        $photo_entry[$field] = $this->$getter();
       }
     }
-
+    
     return $photo_entry;
   }
 }

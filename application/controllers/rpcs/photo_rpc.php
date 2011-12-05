@@ -29,6 +29,17 @@ class Photo_rpc extends CI_Controller {
     
     $gatekeeper = new Gatekeeper();
     $content = $gatekeeper->validatePost($parameters['0']);
+    
+    // We do this to avoid recording the whole image file.
+    if (isset($content['binary'])) {
+      $binary = $content['binary'];
+      unset($content['binary']);
+      log_message('warning', 'rpc_photo parsed content: '.json_encode($content));
+      $content['binary'] = $binary;
+    } else {
+      log_message('warning', 'rpc_photo parsed content: '.json_encode($content));
+    }
+    
     // validatePost returns FALSE if not valid.
     if ($content !== FALSE) {
       $action_result = 'failed : no such command.';

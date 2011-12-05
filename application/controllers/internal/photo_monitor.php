@@ -32,7 +32,7 @@ class Photo_monitor extends CI_Controller {
         // Send binary here for the Simulated_android to simulate rpc.
         $content = array(
           'author' => $this->input->post('usid'),
-          'file_name' => $upload_data['file_name'],
+          //'file_name' => $upload_data['file_name'],
           'file_ext' => $upload_data['file_ext'],
           'binary' => $binary
         );
