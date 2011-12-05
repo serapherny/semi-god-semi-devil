@@ -8,7 +8,7 @@ class User_model extends CI_Model {
     parent::__construct();
   }
 
-  public function get_user_list($limit = 10, $offset = 0) {
+  public function get_user_list($limit = 100, $offset = 0) {
     $result_set = array();
     $query = $this->db->get('user', $limit, $offset);
     foreach ($query->result_array() as $row) {
@@ -35,10 +35,17 @@ class User_model extends CI_Model {
     }
   }
   
-  public function create_user($user, &$response_content) {
-    
-    $response_content = array();
-    
+  public function get_user_data($user_list, $user_ents) {
+    $user_ents = array();
+    $this->db->where_in('sid', $user_list);
+    $query = $this->db->get('user');
+    foreach ($query->result_array() as $row) {
+      $user_ents[] = array('user'=>$row);
+    }
+    return 'suc';
+  }  
+  
+  public function create_user($user) {
     if (!$user instanceof User) {
       return 'failed : not a valid instance of User.';
     } else {
@@ -57,7 +64,6 @@ class User_model extends CI_Model {
     }
   }
   
-
 }
 
 /* End of file user_model.php */

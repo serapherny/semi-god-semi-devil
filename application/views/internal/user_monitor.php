@@ -14,7 +14,14 @@
 	密码：<input type="text" name="password" />
 	验证密码：<input type="text" name="passconf" />
 	邮箱：<input type="text" name="email_addr"/>
+	<input type="hidden" name="mode" value="create" />
 	<button type="submit">创建用户</button>
+</form>
+
+<?php echo form_open(uri_string()); ?>
+	用户sid：<input type="text" name="sid" />
+	<input type="hidden" name="mode" value="data" />
+	<button type="submit">用户信息</button>
 </form>
 
 <div class="margin_tb height_bar">

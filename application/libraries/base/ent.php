@@ -7,7 +7,11 @@ class Ent {
   private $sid_ = NOT_SET;
   
   public function __construct() {
+  }
+  
+  public function new_sid() {
     $this->sid_ = random_string('numeric', 16);
+    return $this;
   }
   
   public function set_sid($sid) {

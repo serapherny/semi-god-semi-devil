@@ -5,15 +5,15 @@ require_once LIB.'base/ent.php';
 class Photo extends Ent {
 
   private
-  $author_ = NOT_SET,
-  $photo_info = NOT_SET,
-  $items_ = array(),
-  $tags_ = array(),
-  $binary_ = NOT_SET,
-  $file_name_ = NOT_SET,
-  $file_ext_ = NOT_SET,
-  $file_path_ = NOT_SET,
-  $create_time_ = NOT_SET;
+    $author_ = NOT_SET,
+    $photo_info = NOT_SET,
+    $items_ = array(),
+    $tags_ = array(),
+    $binary_ = NOT_SET,
+    $file_name_ = NOT_SET,
+    $file_ext_ = NOT_SET,
+    $file_path_ = NOT_SET,
+    $create_time_ = NOT_SET;
 
   public function __construct() {
     parent::__construct();

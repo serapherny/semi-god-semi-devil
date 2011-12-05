@@ -13,6 +13,7 @@ class Photo_rpc extends CI_Controller {
     $this->load->library('xmlrpcs');
   
     $config['functions']['upload_photo'] = array('function' => 'Photo_rpc.upload_photo');
+    $config['functions']['photo_data'] = array('function' => 'Photo_rpc.photo_data');
     $config['object'] = $this;
   
     $this->xmlrpcs->initialize($config);
@@ -42,7 +43,7 @@ class Photo_rpc extends CI_Controller {
           
           $photo = new Photo();
           $blacklist = array();
-          $photo->load_array($content, $blacklist);
+          $photo->load_array($content, $blacklist)->new_sid();
           $valid = $photo->validateNewPhotoData();
 
           if (!$valid) {
@@ -51,7 +52,7 @@ class Photo_rpc extends CI_Controller {
           }
           
           $this->load->model('ent/photo_model', 'photo_model');
-          $action_result = $this->photo_model->upload_photo($photo, $response_content);
+          $action_result = $this->photo_model->upload_photo($photo, &$response_content);
           break;
           
         /*
@@ -64,13 +65,28 @@ class Photo_rpc extends CI_Controller {
           
         /*
         * ==========================================================
+        * RPC Call of retrieving photos information.
+        * ==========================================================
+        */
+        case 'get_photo_data':
+          $photo_id_list = $content['photo_id_list'];
+          if (!is_array($photo_id_list)) {
+            $photo_id_list = array($photo_id_list);
+          }
+          $this->load->model('ent/photo_model', 'photo_model');
+          $action_result = $this->photo_model->get_photo_data($photo_id_list, &$response_content);
+          break;  
+          
+        /*
+        * ==========================================================
         * RPC Call of other photo operations will be added here.
         * ==========================================================
         */
         default:;
       }
     }
-    
+    log_message('warning', 'photo rpc action result: '.$action_result);
+    log_message('warning', 'photo rpc response: '.json_encode($response_content));    
     $response = array(
       array('action_result' => $action_result,
             'content' => array($response_content, 'struct')),
@@ -81,6 +97,10 @@ class Photo_rpc extends CI_Controller {
   
   public function upload_photo($request) {
     return $this->process($request, 'upload_photo');
+  }
+  
+  public function photo_data($request) {
+    return $this->process($request, 'get_photo_data');
   }
 }
 

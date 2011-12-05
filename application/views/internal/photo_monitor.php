@@ -14,6 +14,13 @@
 <br /><br />
 以用户ID:<input type="text" name="usid" size="15" />上传 - 
 <input type="submit" value="upload" />
+<input type="hidden" name="mode" value="upload" />
+</form>
+
+<?php echo form_open(uri_string()); ?>
+	照片sid：<input type="text" name="sid" />
+	<input type="hidden" name="mode" value="data" />
+	<button type="submit">照片信息</button>
 </form>
 
 <div class="margin_tb height_bar">

@@ -8,7 +8,7 @@ class Photo_model extends CI_Model {
     parent::__construct();
   }
 
-  public function get_photo_list($limit = 10, $offset = 0) {
+  public function get_photo_list($limit = 100, $offset = 0) {
     $result_set = array();
     $query = $this->db->get('photo', $limit, $offset);
     foreach ($query->result_array() as $row) {
@@ -17,6 +17,16 @@ class Photo_model extends CI_Model {
       $result_set[] = array('photo'=>$photo);
     }
     return $result_set;
+  }
+  
+  public function get_photo_data($photo_id_list, &$response_content) {
+    $response_content = array();
+    $this->db->where_in('sid', $photo_id_list);
+    $query = $this->db->get('photo');
+    foreach ($query->result_array() as $row) {
+      $response_content[] = array('photo'=>$row);
+    }
+    return 'suc';
   }
   
   public function upload_photo($photo, &$response_content) {

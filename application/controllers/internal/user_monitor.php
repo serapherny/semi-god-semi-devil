@@ -6,10 +6,8 @@ class User_monitor extends CI_Controller {
   function __construct() {
     parent::__construct();
   }
-
-  public function index() {
-    $this->load->helper('url');
-    $this->load->helper('form');
+  
+  public function create_user() {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('nickname', '用户名', 'required');
     $this->form_validation->set_rules('password', '密码', 'required');
@@ -18,14 +16,14 @@ class User_monitor extends CI_Controller {
     // Check if the fields have been fulfilled.
     if ($this->form_validation->run() == TRUE ) {
       $content = array(
-                           'nickname'=> $this->input->post('nickname'),
-                           'password'=> $this->input->post('password'),
-                           'email_addr'=> $this->input->post('email_addr')
+                     'nickname'=> $this->input->post('nickname'),
+                     'password'=> $this->input->post('password'),
+                     'email_addr'=> $this->input->post('email_addr')
       );
       $this->load->library('xmlrpc');
       $this->load->library('device/simulate_android');
       $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
-                         ->send_rpc('create_user', $content, 'user_rpc');
+                      ->send_rpc('create_user', $content, 'user_rpc');
       if ($rpc_result['action_result'] == 'suc') {
         $action_result = '成功创建新用户';
       } else {
@@ -39,7 +37,46 @@ class User_monitor extends CI_Controller {
         $action_result = '';
       }
     }
-    
+    return $action_result;
+  }
+  
+  public function user_data() {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('sid', '用户sid', 'required');
+    // Check if the fields have been fulfilled.
+    if ($this->form_validation->run() == TRUE ) {
+      $user_list = explode(',', $this->input->post('sid'));
+      $content = array('user_list'=> array($user_list, 'array'));
+      $this->load->library('xmlrpc');
+      $this->load->library('device/simulate_android');
+      $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
+                      ->send_rpc('user_data', $content, 'user_rpc');
+      if ($rpc_result['action_result'] == 'suc') {
+        $action_result = '成功取得用户数据';
+      } else {
+        $action_result = '取得用户数据失败， 错误类型：'.$rpc_result['action_result'];
+      }
+    } else {
+      $error = validation_errors();
+      if ($error) {
+        $action_result = '输入有误：'.$error;
+      } else {
+        $action_result = '';
+      }
+    }
+    return $action_result;
+  }
+
+  public function index() {
+    $this->load->helper('url');
+    $this->load->helper('form');
+    $action_result = '';
+    $mode = $this->input->post('mode');
+    switch ($mode) {
+      case 'create':     $action_result = $this->create_user(); break;
+      case 'data':   $action_result = $this->user_data(); break;
+      default: break;
+    }
     $this->load->model('ent/user_model', 'user_model');
     $data = array('user_list' => $this->user_model->get_user_list(),
                   'rebuild_db_page' => site_url('internal/rebuild_db'),

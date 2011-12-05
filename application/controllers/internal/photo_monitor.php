@@ -7,7 +7,7 @@ class Photo_monitor extends CI_Controller {
     parent::__construct();
   }
 
-  public function index() {
+  public function create_photo() {
     $this->load->helper(array('form', 'url', 'file'));
     
     // This path is for website temp use only.
@@ -61,7 +61,46 @@ class Photo_monitor extends CI_Controller {
         $action_result = '';
       }
     }
-    
+    return $action_result;
+  }
+  
+  public function photo_data() {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('sid', '照片sid', 'required');
+    // Check if the fields have been fulfilled.
+    if ($this->form_validation->run() == TRUE ) {
+      $photo_id_list = explode(',', $this->input->post('sid'));
+      $content = array('photo_id_list'=> array($photo_id_list, 'array'));
+      $this->load->library('xmlrpc');
+      $this->load->library('device/simulate_android');
+      $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
+      ->send_rpc('photo_data', $content, 'photo_rpc');
+      if ($rpc_result['action_result'] == 'suc') {
+        $action_result = '成功取得照片数据';
+      } else {
+        $action_result = '取得照片数据失败， 错误类型：'.$rpc_result['action_result'];
+      }
+    } else {
+      $error = validation_errors();
+      if ($error) {
+        $action_result = '输入有误：'.$error;
+      } else {
+        $action_result = '';
+      }
+    }
+    return $action_result;
+  }
+  
+  public function index() {
+    $this->load->helper('url');
+    $this->load->helper('form');
+    $action_result = '';
+    $mode = $this->input->post('mode');
+    switch ($mode) {
+      case 'upload':     $action_result = $this->create_photo(); break;
+      case 'data':       $action_result = $this->photo_data(); break;
+      default: break;
+    }
     $this->load->model('ent/photo_model', 'photo_model');
     $data = array('photo_list' => $this->photo_model->get_photo_list(),
                   'rebuild_db_page' => site_url('internal/rebuild_db'),
