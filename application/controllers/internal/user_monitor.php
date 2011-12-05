@@ -42,10 +42,9 @@ class User_monitor extends CI_Controller {
   
   public function user_data() {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('sid', '用户sid', 'required');
     // Check if the fields have been fulfilled.
     if ($this->form_validation->run() == TRUE ) {
-      $user_list = explode(',', $this->input->post('sid'));
+      $user_list = explode(',', $this->input->post('sid_data'));
       $content = array('user_list'=> array($user_list, 'array'));
       $this->load->library('xmlrpc');
       $this->load->library('device/simulate_android');
@@ -66,6 +65,38 @@ class User_monitor extends CI_Controller {
     }
     return $action_result;
   }
+  
+  public function bind_user() {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('sid_bind', '用户名');
+    $this->form_validation->set_rules('email_bind', 'Email');
+    $this->form_validation->set_rules('password_bind', '密码', 'required');
+    // Check if the fields have been fulfilled.
+    if ($this->form_validation->run() == TRUE ) {
+      $content = array(
+                       'sid'=> $this->input->post('sid_bind'),
+                       'email_addr'=> $this->input->post('email_bind'),
+                       'password' => $this->input->post('password_bind')
+                 );
+      $this->load->library('xmlrpc');
+      $this->load->library('device/simulate_android');
+      $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
+                         ->send_rpc('bind_user', $content, 'user_rpc');
+      if ($rpc_result['action_result'] == 'suc') {
+        $action_result = '成功Bind用户';
+      } else {
+        $action_result = 'Bind用户数据失败， 错误类型：'.$rpc_result['action_result'];
+      }
+    } else {
+      $error = validation_errors();
+      if ($error) {
+        $action_result = '输入有误：'.$error;
+      } else {
+        $action_result = '';
+      }
+    }
+    return $action_result;
+  }
 
   public function index() {
     $this->load->helper('url');
@@ -73,8 +104,9 @@ class User_monitor extends CI_Controller {
     $action_result = '';
     $mode = $this->input->post('mode');
     switch ($mode) {
-      case 'create':     $action_result = $this->create_user(); break;
+      case 'create': $action_result = $this->create_user(); break;
       case 'data':   $action_result = $this->user_data(); break;
+      case 'bind':   $action_result = $this->bind_user(); break;
       default: break;
     }
     $this->load->model('ent/user_model', 'user_model');

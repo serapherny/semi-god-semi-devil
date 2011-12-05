@@ -36,13 +36,17 @@ $config['user_table_fields']	=  array(
                            'constraint'  => '16',
                            'null'        => TRUE
                           ),
+                          
+  'last_login_time' => array(
+                           'type'        => 'BIGINT',
+                           'null'        => TRUE
+                          ),
 
   // All other information that cannot be used as a search key.
   // Stored using JSON in this field, including:
   //   profile_photo_id,
   //   friends_list,
   //   device_list,
-  //   last_log_in_time,
   //   last_active_time,
   //   create_time,
   //   birthday/gender/school/work/.....

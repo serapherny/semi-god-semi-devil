@@ -19,9 +19,17 @@
 </form>
 
 <?php echo form_open(uri_string()); ?>
-	用户sid：<input type="text" name="sid" />
+	用户sid：<input type="text" name="sid_data" />
 	<input type="hidden" name="mode" value="data" />
 	<button type="submit">用户信息</button>
+</form>
+
+<?php echo form_open(uri_string()); ?>
+	用户sid：<input type="text" name="sid_bind" />
+	邮箱：<input type="text" name="email_bind"/>
+	密码：<input type="text" name="password_bind" />
+	<input type="hidden" name="mode" value="bind" />
+	<button type="submit">Bind用户</button>
 </form>
 
 <div class="margin_tb height_bar">

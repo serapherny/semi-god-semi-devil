@@ -45,6 +45,22 @@ class User_model extends CI_Model {
     return 'suc';
   }  
   
+  public function get_myself($user, &$response_content) {
+    $response_content = array();
+    if (!$user instanceof User) {
+      log_message('error', 'You are not an invalid user in database.');
+      return 'failed : You are not an invalid user in database.';
+    } else {
+      $this->db->where('last_device', $user->get_last_device());
+      $this->db->order_by('last_login_time', 'desc');
+      $query = $this->db->get('user', 1, 0);
+      foreach ($query->result_array() as $row) {
+        $response_content[] = array('user'=>$row);
+      }
+      return 'suc';
+    }
+  }
+  
   public function create_user($user) {
     if (!$user instanceof User) {
       return 'failed : not a valid instance of User.';
@@ -56,7 +72,7 @@ class User_model extends CI_Model {
       }
       // Here we are sure that insert can proceed.
       $blacklist = array();
-      $user->set_create_time(now());
+      $user->set_create_time(now())->set_last_login_time(now());
       $user_rec = $user->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('user', $user_rec);
       
@@ -64,6 +80,25 @@ class User_model extends CI_Model {
     }
   }
   
+  public function bind_user($user) {
+    if (!$user instanceof User) {
+      log_message('error', 'Adding an invalid user.');
+    } else {
+      $this->db->where('email_addr', $user->get_email_addr());
+      $this->db->where('password', $user->get_password());
+      $query = $this->db->get('user', 1, 0);
+      if ($query->num_rows() == 0) {
+        return 'failed : email not existed in database or wrong password.';
+      }
+      
+      // Here we are sure that the update can proceed.
+      $user->set_last_login_time(now());
+      $whitelist = array('last_device', 'last_login_time');
+      $user_rec = $user->to_array($compressed = true, $filter_null = false, $whitelist, true);
+      $this->db->where('email_addr', $user->get_email_addr());
+      $this->db->update('user', $user_rec);
+    }
+  }
 }
 
 /* End of file user_model.php */

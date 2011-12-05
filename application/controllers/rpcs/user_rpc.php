@@ -9,7 +9,6 @@ class User_rpc extends CI_Controller {
   }
   
   public function index() {
-    log_message('warning', 'user rpc called.');
     $this->load->library('xmlrpc');
     $this->load->library('xmlrpcs');
   
@@ -32,6 +31,7 @@ class User_rpc extends CI_Controller {
     
     $gatekeeper = new Gatekeeper();
     $content = $gatekeeper->validatePost($parameters['0']);
+    log_message('warning', 'rpc parsed content: '.json_encode($content));
     // validatePost returns FALSE if not valid.
     if ($content !== FALSE) {
       $action_result = 'failed : no such command.';
@@ -86,11 +86,10 @@ class User_rpc extends CI_Controller {
          * ==========================================================
          */
         case 'bind_user':
-          
           $user = new User();
-          $whitelist = array('email_addr', 'sid', 'UDID', 'last_device');
+          $whitelist = array('email_addr', 'sid', 'UDID', 'last_device', 'password');
           $user->load_array($content, $whitelist, true);
-          $valid = $user->validateIdentifiable();
+          $valid = $user->validateBindable();
           
           if (!$valid) {
             $action_result = 'failed : not valid or not enough user data for binding.';
@@ -109,11 +108,17 @@ class User_rpc extends CI_Controller {
         case 'user_data':
           
           $user_list = $content['user_list'];
-          if (!is_array($user_list)) {
-            $user_list = array($user_list);
-          }
           $this->load->model('ent/user_model', 'user_model');
-          $action_result = $this->user_model->get_user_data($user_list, &$response_content);
+          // If user list is empty, we by default get data of the user himself.
+          if (!$user_list) {
+            $action_result = $this->user_model->get_myself(&$response_content);
+          } else {
+            // Else we get user data according to the user list.
+            if (!is_array($user_list)) {
+              $user_list = array($user_list);
+            }
+            $action_result = $this->user_model->get_user_data($user_list, &$response_content);
+          }
           break;
           
         default:;

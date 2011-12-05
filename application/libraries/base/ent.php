@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-define('NOT_SET', FALSE);
+define('NOT_SET', 'NOT_SET');
 
 class Ent {
   
@@ -20,11 +20,6 @@ class Ent {
   }
   
   public function get_sid() {
-    if ($this->sid_ != NOT_SET) {
-      return $this->sid_;
-    } else {
-      log_message('error', 'Read sid from uninitialized Ent.');
-      return NOT_SET;
-    }
+    return $this->sid_;
   }
 }
