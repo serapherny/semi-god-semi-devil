@@ -47,7 +47,7 @@ class Poll_monitor extends CI_Controller {
     $this->form_validation->set_rules('sid', 'poll sid');
     if ($this->form_validation->run() == TRUE ) {
       $poll_list = explode(',', $this->input->post('sid'));
-      $content = array('poll_list'=> array($poll_list, 'array'));
+      $content = array('poll_id_list'=> array($poll_list, 'array'));
       $this->load->library('xmlrpc');
       $this->load->library('device/simulate_android');
       $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
