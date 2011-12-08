@@ -33,11 +33,14 @@ class Poll_rpc extends CI_Controller {
     $content = $gatekeeper->validatePost($parameters['0']);
     
     // We do this to avoid recording the whole image file.
-    if (isset($content['binary'])) {
-      $binary = $content['binary'];
-      unset($content['binary']);
+    if (isset($content['ext1'])) {
+      $binary1 = $content['photo_1'];
+      $binary2 = $content['photo_2'];
+      $content['photo_1'] = 'size:';
+      $content['photo_2'] = 'size:';
       log_message('warning', 'rpc_poll parsed content: '.json_encode($content));
-      $content['binary'] = $binary;
+      $content['photo_1'] = $binary1;
+      $content['photo_2'] = $binary2;
     } else {
       log_message('warning', 'rpc_poll parsed content: '.json_encode($content));
     }
@@ -78,6 +81,7 @@ class Poll_rpc extends CI_Controller {
           /*
            * Upload photo stream and get sid then.
            */
+          $content['author'] = 'qc_test_hack';
           $this->load->model('ent/photo_model', 'photo_model');
           
           $photo = new Photo();
@@ -136,7 +140,7 @@ class Poll_rpc extends CI_Controller {
 
           $this->load->model('ent/poll_model', 'poll_model');
           $action_result = $this->poll_model->create_poll($poll, &$response_content);
-          break;          
+          break;
           
         /*
         * ==========================================================

@@ -33,14 +33,14 @@ class Poll_model extends CI_Model {
 
     $response_content = array();
     
-    if (!$poll instanceof poll) {
+    if (!$poll instanceof Poll) {
       return 'failed : not a valid instance of poll.';
     } else {
       $poll->set_create_time(now());
       $blacklist = array();
       $poll_entry = $poll->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('poll', $poll_entry);
-      
+      $response_content['sid'] = $poll->get_sid();
       return 'suc';
     }
   }
