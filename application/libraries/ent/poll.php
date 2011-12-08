@@ -107,4 +107,71 @@ class Poll extends Ent {
     }
     return $this;
   }
+  
+  public function load_array($poll_entry, $blacklist, $whitelist = false) {
+  
+    $fields = array('sid' => 'basic', 
+                    'poll_photo_1' => 'Photo', 
+                    'poll_photo_2' => 'Photo',
+                    'author' => 'User',
+                    'type' => 'basic', 
+                    'last_comment' => 'Post',
+                    'poll_info' => 'basic',
+                    'create_time' => 'basic');
+    
+    foreach ($fields as $field => $type) {
+      $lock = !isset($field, $blacklist) ^ $whitelist;
+      if ($lock && isset($poll_entry[$field])) {
+        $setter = 'set_'.$field;
+        if ($type == 'basic') {
+          $this->$setter($photo_entry[$field]);
+        } else {
+          $instance = new $type;
+          $instance->load_array($photo_entry[$field], array(), false);
+          $this->$setter($instance);
+        }
+      }
+    }
+    return $this;
+  }
+  
+  public function to_array($compressed,
+                           $filter_null,
+                           $blacklist,
+                           $whitelist = false) {
+    if ($compressed) {
+      $fields = array('sid' => 'basic', 
+                      'poll_photo_1' => 'Photo', 
+                      'poll_photo_2' => 'Photo',
+                      'author' => 'User',
+                      'type' => 'basic', 
+                      'last_comment' => 'Post',
+                      'poll_info' => 'basic',
+                      'create_time' => 'basic');
+    } else {
+      $fields = array('sid' => 'basic', 
+                      'poll_photo_1' => 'Photo', 
+                      'poll_photo_2' => 'Photo',
+                      'author' => 'User',
+                      'type' => 'basic', 
+                      'last_comment' => 'Post',
+                      'create_time' => 'basic');
+    }
+    
+    foreach ($fields as $field => $type) {
+      $lock = !isset($field, $blacklist) ^ $whitelist;
+      $getter = 'get_'.$field;
+      if ($lock && (!$filter_null || $this->$getter() !== NOT_SET)) {
+        if ($type == 'basic') {
+          $poll_entry[$field] = $this->$getter();
+        } else {
+          $instance = new $type;
+          $poll_entry[$field] = 
+            $instance->to_array($compressed, $filter_null, array(), false);
+        }
+      }
+    }
+
+    return $poll_entry;
+  }
 }
