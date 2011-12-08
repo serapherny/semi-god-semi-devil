@@ -9,10 +9,9 @@ class Poll_monitor extends CI_Controller {
   
   public function create_poll() {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('author', '作者sid', 'required');
-    $this->form_validation->set_rules('type', '类型', 'required');
-    $this->form_validation->set_rules('data', '数据');
-    $this->form_validation->set_rules('cansee', '可见', 'required');
+    $this->form_validation->set_rules('usid', '作者sid', 'required');
+    $this->form_validation->set_rules('photo_1_id', '照片1', 'required');
+    $this->form_validation->set_rules('photo_1_id', '照片2');
     // Check if the fields have been fulfilled.
     if ($this->form_validation->run() == TRUE ) {
       $content = array(

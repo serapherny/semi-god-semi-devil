@@ -2,42 +2,18 @@
 
 require_once LIB.'base/ent.php';
 
-class Photo extends Ent {
+class Comment extends Ent {
 
   private
-    $author_ = NOT_SET,
-    $photo_info = NOT_SET,
-    $items_ = array(),
-    $tags_ = array(),
-    $binary_ = NOT_SET,
-    $file_name_ = NOT_SET,
-    $file_ext_ = NOT_SET,
-    $file_path_ = NOT_SET,
+    $author_ = NOT_SET,  // class User or int
+    $topic_ = NOT_SET,  // class Poll or int
+    $target_ = NOT_SET, // class Comment or int
+    $content_ = NOT_SET,
     $create_time_ = NOT_SET;
 
-  public function BaseFieldsArray() {
-    return array_merge(
-      array('file_path', 
-            'file_name', 
-            'file_ext',
-            'author', 
-            'binary'),
-      parent::BaseFieldsArray()
-    );
-  }
-  
-  public function CompressableFieldsArray($compressed) {
-    if ($compressed){
-      $fields = array('photo_info');
-    } else {
-      $fields = array('create_time');
-    }
-    return array_merge($fields, parent::BaseFieldsArray());
-  }  
-  
   public function __construct() {
     parent::__construct();
-    $this->set_type(EntType::EntPhoto);
+    $this->set_type(EntType.EntComment);
   }
 
   public function save_binary_to_file($filename) {
@@ -120,5 +96,44 @@ class Photo extends Ent {
   
   public function set_photo_info() {
     return $this;
+  }  
+  
+  public function load_array($photo_entry, $blacklist, $whitelist = false) {
+    
+    $fields = array('sid', 'file_path', 'file_name', 'file_ext',
+                    'author', 'binary', 'photo_info',
+                    'create_time');
+    
+    foreach ($fields as $field) {
+      $lock = !in_array($field, $blacklist) ^ $whitelist;
+      if ($lock && isset($photo_entry[$field])) {
+        $setter = 'set_'.$field;
+        $this->$setter($photo_entry[$field]);
+      }
+    }
+    return $this;
+  }
+
+  public function to_array($compressed,
+                           $filter_null,
+                           $blacklist, 
+                           $whitelist = false) {
+    if ($compressed) {
+      $fields = array('sid', 'file_path', 'file_name', 'file_ext',
+                      'author', 'binary', 'photo_info');
+    } else {
+      $fields = array('sid', 'file_path', 'file_name', 'file_ext',
+                      'author', 'binary', 'create_time');
+    }
+    
+    foreach ($fields as $field) {
+      $lock = !in_array($field, $blacklist) ^ $whitelist;
+      $getter = 'get_'.$field;
+      if ($lock && (!$filter_null || $this->$getter() !== NOT_SET)) {
+        $photo_entry[$field] = $this->$getter();
+      }
+    }
+    
+    return $photo_entry;
   }
 }

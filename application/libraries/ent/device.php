@@ -10,6 +10,7 @@ class Device extends Ent {
   
   public function __construct() {
     parent::__construct();
+    $this->set_type(EntType::EntDevice);
   }
   
   public function get_udid() {

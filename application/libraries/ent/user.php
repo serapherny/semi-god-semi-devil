@@ -9,14 +9,35 @@ class User extends Ent {
     $email_addr_ = NOT_SET,
     $nickname_ = NOT_SET,
     $password_ = NOT_SET,
-    $profile_photo = NOT_SET,
+    $profile_photo = NOT_SET,  // class Photo or int
     $last_device_ = NOT_SET,
     $create_time_ = NOT_SET,
     $last_login_time_ = NOT_SET,
     $device_list_ = array();
   
+  public function BaseFieldsArray() {
+    return array_merge(
+      array('nickname', 
+            'email_addr', 
+            'password',
+            'last_device', 
+            'last_login_time'),
+      parent::BaseFieldsArray()
+    );
+  }
+  
+  public function CompressableFieldsArray($compressed) {
+    if ($compressed){
+      $fields = array('user_info');
+    } else {
+      $fields = array('device_list', 'create_time');
+    }
+    return array_merge($fields, parent::BaseFieldsArray());
+  }
+    
   public function __construct() {
     parent::__construct();
+    $this->set_type(EntType::EntUser);
   }
   
   public function validateBasicDataForNewUser() {
@@ -95,6 +116,7 @@ class User extends Ent {
   public function set_last_device($device_id) {
     if (Device::is_device_id($device_id)) {
       $this->last_device_ = $device_id;
+      $this->add_device($device_id);
     } else {
       log_message('error', 'Adding invalid device id.');
     }
@@ -128,54 +150,6 @@ class User extends Ent {
   }
   
   public function set_user_info() {
-    return $this;
-  }
-  
-  public function to_array($compressed, 
-                           $filter_null = true, 
-                           $blacklist = array(),
-                           $whitelist = false) {
-    
-    $user_rec = array();
-
-    if ($compressed) {
-      $fields = array('sid', 'nickname', 'email_addr', 'password',
-                           'last_device', 'last_login_time', 'user_info');
-    } else {
-      $fields = array('sid', 'nickname', 'email_addr', 'password',
-                           'last_device', 'create_time', 'last_login_time',
-                           'device_list');
-    }
-    
-    foreach ($fields as $field) {
-      $lock = !in_array($field, $blacklist) ^ $whitelist;
-      $getter = 'get_'.$field;
-      if ($lock && (!$filter_null || $this->$getter() !== NOT_SET)) {
-        $user_rec[$field] = $this->$getter();
-      }
-    }
-    
-    return $user_rec;
-  }
-  
-  public function load_array($user_rec, $blacklist = array(), $whitelist = false) {
-    
-    $fields = array('sid', 'nickname', 'email_addr', 'password',
-                    'last_device', 'create_time', 'last_login_time',
-                    'device_list', 'UDID', 'user_info');
-    
-    foreach ($fields as $field) {
-      $lock[$field] = !in_array($field, $blacklist) ^ $whitelist;
-      if ($lock[$field] && isset($user_rec[$field])) {
-        $setter = 'set_'.$field;
-        if ($field == 'UDID') {
-          $this->set_last_device($user_rec['UDID'])
-               ->add_device($user_rec['UDID']);
-        } else {
-          $this->$setter($user_rec[$field]);
-        }
-      }
-    }
     return $this;
   }
 }
