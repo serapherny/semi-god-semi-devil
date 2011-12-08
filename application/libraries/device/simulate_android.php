@@ -13,7 +13,7 @@ class Simulate_android {
   
   public function send_rpc($action, $content, $type) {
     
-    $rpcs = array('user_rpc', 'photo_rpc');
+    $rpcs = array('user_rpc', 'photo_rpc', 'poll_rpc');
     
     if (!in_array($type, $rpcs)) {
       return 'Failed: unsupported rpc type.';

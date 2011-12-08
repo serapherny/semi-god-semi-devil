@@ -13,7 +13,8 @@
 以用户ID:<input type="text" name="usid" size="15" />发出投票
 Photo 1 <input type="text" name="photo_1_id" size="15" />
 Photo 2 <input type="text" name="photo_2_id" size="15" />
-<input type="submit" value="upload" />
+描述 <input type="text" name="description" size="15" />
+<input type="submit" value="Create" />
 <input type="hidden" name="mode" value="create" />
 </form>
 

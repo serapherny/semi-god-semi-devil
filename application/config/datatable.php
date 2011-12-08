@@ -121,37 +121,58 @@ $config['poll_table_fields']	=  array(
                            'constraint'  => '16'
                           ),
 
-  'type'      => array(
-                           'type'        => 'VARCHAR',
-                           'constraint'  => '255' 
+  'poll_type'         => array(
+                           'type'        => 'INT'
                           ),
 
-  'cansee'        => array(
+  'visibility'   => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '8'
                           ),
                           
   'author'        => array(
                            'type'        => 'VARCHAR',
-                           'constraint'  => '16',
-                           'null'        => TRUE
+                           'constraint'  => '16'
                           ),
                             
   'create_time'   => array(
-                           'type'        => 'BIGINT'
-                          ),
-                          
-  'last_comment_time'  => array(
                            'type'        => 'BIGINT',
                            'null'        => TRUE
-                          ),   
+                          ),
+                          
+  'latest_comment_time'  => array(
+                           'type'        => 'BIGINT',
+                           'null'        => TRUE
+                          ),
+                        
+  'latest_comment'   => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'   => '16',
+                           'null'        => TRUE
+                          ),
+                      
+  'photo_1'      => array(
+                          'type'         => 'VARCHAR',
+                          'constraint'   => '16'
+                         ),
+                         
+  'photo_2'      => array(
+                          'type'         => 'VARCHAR',
+                          'constraint'   => '16'
+                         ),
+                         
+  'category'     => array(
+                          'type'         => 'VARCHAR',
+                          'constraint'   => '255',
+                          'null'         => TRUE
+                         ),
+                         
+  'description'  => array(
+                          'type'         => 'TEXT',
+                          'null'         => TRUE
+                         ),
 // All other information that cannot be used as a search key.
-// Stored using JSON in this field, including:
-// poll_image(s)
-// post_user_icon,
-// post_user_name,
-// description,
-// latest_comment_id
+// Stored using JSON in this field.
   'poll_info'     => array(
                            'type'        => 'TEXT',
                            'null'	     => TRUE

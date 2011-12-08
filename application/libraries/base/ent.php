@@ -9,6 +9,7 @@ class EntType {
   const EntComment = 4;
   const EntTag = 5;
   const EntDevice = 6;
+
   
   public static function GetEntType($index) {
     $mapper = array(
@@ -24,6 +25,10 @@ class EntType {
     } else {
       return $mapper($index);
     }
+  }
+  
+  public static function  IsValidEntType($index) {
+    return ($index > 0 && $index < 7);
   }
 }
 
@@ -55,8 +60,8 @@ class Ent {
   }
   
   public function set_type($type) {
-    if ($type instanceof EntType) {
-      $this->ent_type_ = type;
+    if (EntType::IsValidEntType($type)) {
+      $this->ent_type_ = $type;
     } else {
       log_message('warning', 'Setting invalid ent type.');
     }

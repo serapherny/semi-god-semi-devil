@@ -12,22 +12,23 @@ class Poll_monitor extends CI_Controller {
     $this->form_validation->set_rules('usid', '作者sid', 'required');
     $this->form_validation->set_rules('photo_1_id', '照片1', 'required');
     $this->form_validation->set_rules('photo_1_id', '照片2');
+    $this->form_validation->set_rules('description', '描述');
     // Check if the fields have been fulfilled.
     if ($this->form_validation->run() == TRUE ) {
       $content = array(
-                     'author'=> $this->input->post('author'),
-                     'template'=> $this->input->post('template'),
-                     'data'=> $this->input->post('data'),
-                     'cansee'=> $this->input->post('cansee')
+                     'author'=> $this->input->post('usid'),
+                     'photo_1'=> $this->input->post('photo_1_id'),
+                     'photo_2'=> $this->input->post('photo_2_id'),
+                     'description'=> $this->input->post('description')
       );
       $this->load->library('xmlrpc');
       $this->load->library('device/simulate_android');
       $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
                       ->send_rpc('create_poll', $content, 'poll_rpc');
       if ($rpc_result['action_result'] == 'suc') {
-        $action_result = '成功创建新用户';
+        $action_result = '成功创建新投票';
       } else {
-        $action_result = '创建用户失败， 错误类型：'.$rpc_result['action_result'];
+        $action_result = '创建投票失败， 错误类型：'.$rpc_result['action_result'];
       }
     } else {
       $error = validation_errors();
@@ -52,9 +53,9 @@ class Poll_monitor extends CI_Controller {
       $rpc_result = $this->simulate_android->set_xmlrpc($this->xmlrpc)
                       ->send_rpc('poll_data', $content, 'poll_rpc');
       if ($rpc_result['action_result'] == 'suc') {
-        $action_result = '成功取得用户数据';
+        $action_result = '成功取得投票数据';
       } else {
-        $action_result = '取得用户数据失败， 错误类型：'.$rpc_result['action_result'];
+        $action_result = '取得投票数据失败， 错误类型：'.$rpc_result['action_result'];
       }
     } else {
       $error = validation_errors();
@@ -82,7 +83,7 @@ class Poll_monitor extends CI_Controller {
                   'rebuild_db_page' => site_url('internal/rebuild_db?table=poll'),
                   'action_result' => $action_result               
     );
-    $this->load->view('header', array('page_title'=>'用户管理'));
+    $this->load->view('header', array('page_title'=>'投票管理'));
   	$this->load->view('internal/poll_monitor', $data);
   	$this->load->view('footer');
   }
