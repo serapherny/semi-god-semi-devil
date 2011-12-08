@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-define('NOT_SET', 'NOT_SET');
+define('NOT_SET', '');
 
 class Ent {
   

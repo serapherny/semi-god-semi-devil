@@ -12,8 +12,9 @@ class Rebuild_db extends CI_Controller {
                             'message'=> $message));
   }
   
-  private function rebuild_table($config_pre, $table_name) {
-    
+  public function rebuild_table($table_name) {
+
+    $config_pre = $table_name.'_table';
     $fields = $this->config->item($config_pre.'_fields');
     $this->dbforge->add_field($fields);
     $this->dbforge->add_field('id'); // This serves as a short userid.
@@ -56,9 +57,6 @@ class Rebuild_db extends CI_Controller {
   }
   
   public function rebuild_db() {
-    // Load database forge module.
-    $this->load->dbforge();
-    
     $this->config->load('datatable');
     $dbname = $this->config->item('dbname');
     
@@ -82,15 +80,27 @@ class Rebuild_db extends CI_Controller {
     $this->notify('info', '成功连接到新数据库!');
     
     // Create user table.
-    $this->rebuild_table('user_table', 'user');
+    $this->rebuild_table('user');
     
     // Create photo table.
-    $this->rebuild_table('photo_table', 'photo');
+    $this->rebuild_table('photo');
+    
+    // Create poll table.
+    $this->rebuild_table('poll');
   }
   
   public function index() {
+    // Load database forge module.
+    $this->load->dbforge();
+    $this->config->load('datatable');
+
     $this->load->view('header', array('page_title'=>'重建数据库'));
-    $this->rebuild_db();
+    $table = $this->input->get('table');
+    if ($table) {
+      $this->rebuild_table($table);
+    } else {
+      $this->rebuild_db();
+    }
   	$this->load->view('footer');
   }
 }

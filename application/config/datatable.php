@@ -110,49 +110,54 @@ $config['photo_table_keys'] = array();
 
 /*
 |--------------------------------------------------------------------------
-| config semi_feed fields configuration.
+| config semi_poll fields configuration.
 |--------------------------------------------------------------------------
 |
 */
-$config['feed_table_fields']	=  array(
+$config['poll_table_fields']	=  array(
 
   'sid'           => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '16'
                           ),
 
-  'file_path'     => array(
+  'type'      => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '255' 
                           ),
 
-  'file_name'     => array(
+  'cansee'        => array(
                            'type'        => 'VARCHAR',
-                           'constraint'  => '255' 
+                           'constraint'  => '8'
                           ),
-  'file_ext'      => array(
-                           'type'        => 'VARCHAR',
-                           'constraint'  => '255' 
-                          ),
-
+                          
   'author'        => array(
                            'type'        => 'VARCHAR',
                            'constraint'  => '16',
                            'null'        => TRUE
                           ),
-
+                            
+  'create_time'   => array(
+                           'type'        => 'BIGINT'
+                          ),
+                          
+  'last_comment_time'  => array(
+                           'type'        => 'BIGINT',
+                           'null'        => TRUE
+                          ),   
 // All other information that cannot be used as a search key.
 // Stored using JSON in this field, including:
-// create_time,
-// file_type,
-// image_size,
-// image_file_length, ...
-  'photo_info'     => array(
+// poll_image(s)
+// post_user_icon,
+// post_user_name,
+// description,
+// latest_comment_id
+  'poll_info'     => array(
                            'type'        => 'TEXT',
                            'null'	     => TRUE
-)
+                          )
 );
 
-$config['photo_table_primary_keys'] = array();
-$config['photo_table_keys'] = array();
+$config['poll_table_primary_keys'] = array();
+$config['poll_table_keys'] = array();
 

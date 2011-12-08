@@ -112,7 +112,7 @@ class User_monitor extends CI_Controller {
     }
     $this->load->model('ent/user_model', 'user_model');
     $data = array('user_list' => $this->user_model->get_user_list(),
-                  'rebuild_db_page' => site_url('internal/rebuild_db'),
+                  'rebuild_db_page' => site_url('internal/rebuild_db?table=user'),
                   'action_result' => $action_result               
     );
     $this->load->view('header', array('page_title'=>'用户管理'));

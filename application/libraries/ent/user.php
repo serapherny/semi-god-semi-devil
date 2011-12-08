@@ -168,10 +168,11 @@ class User extends Ent {
       $lock[$field] = !in_array($field, $blacklist) ^ $whitelist;
       if ($lock[$field] && isset($user_rec[$field])) {
         $setter = 'set_'.$field;
-        $this->$setter($user_rec[$field]);
-        
         if ($field == 'UDID') {
-          $this->set_last_device($user_rec['UDID']);
+          $this->set_last_device($user_rec['UDID'])
+               ->add_device($user_rec['UDID']);
+        } else {
+          $this->$setter($user_rec[$field]);
         }
       }
     }
