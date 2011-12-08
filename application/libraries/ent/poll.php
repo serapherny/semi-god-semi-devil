@@ -20,6 +20,10 @@ class PollType {
       return $mapper($index);
     }
   }
+  
+  public static function  IsValidPollType($index) {
+    return ($index > 0 && $index < 3);
+  }
 }
 
 class Poll extends Ent {
@@ -41,7 +45,7 @@ class Poll extends Ent {
             'photo_2',
             'author',
             'poll_type', 
-            'last_comment',
+            'latest_comment',
             'description',
             'create_time'),
       parent::BaseFieldsArray()
@@ -74,12 +78,12 @@ class Poll extends Ent {
     return $this;
   }
   
-  public function get_last_comment() {
+  public function get_latest_comment() {
     return $this->latest_comment_;
   }
     
-  public function set_last_comment($last_comment) {
-    $this->latest_comment_ = $last_comment;
+  public function set_latest_comment($latest_comment) {
+    $this->latest_comment_ = $latest_comment;
     return $this;
   }
 
@@ -133,7 +137,7 @@ class Poll extends Ent {
   }
   
   public function set_poll_type($poll_type) {
-    if ($poll_type instanceof PollType) {
+    if (PollType::IsValidPollType($poll_type)) {
       $this->poll_type_ = $poll_type;
     } else {
       log_message('warning', 'Setting invalid type.');

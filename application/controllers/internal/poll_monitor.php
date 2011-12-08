@@ -19,7 +19,8 @@ class Poll_monitor extends CI_Controller {
                      'author'=> $this->input->post('usid'),
                      'photo_1'=> $this->input->post('photo_1_id'),
                      'photo_2'=> $this->input->post('photo_2_id'),
-                     'description'=> $this->input->post('description')
+                     'description'=> $this->input->post('description'),
+      				 'poll_type'=> 1
       );
       $this->load->library('xmlrpc');
       $this->load->library('device/simulate_android');

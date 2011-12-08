@@ -25,7 +25,7 @@ class Simulate_android {
     //======================================================
     //    Uncomment this for debugging use.
     
-    $this->xmlrpc_->set_debug(TRUE);
+    //$this->xmlrpc_->set_debug(TRUE);
     
     //
     //======================================================
