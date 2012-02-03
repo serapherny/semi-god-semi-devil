@@ -1,9 +1,14 @@
 .single-fall {
 	float: left;
-	border: black 1px solid;
-	height: 500px;
+	border: #eee 1px solid;
 }
 
 .waterfall {
-	width: 820px;
+	width: 1010px;
+}
+
+.item-box {
+	border: black 1px solid;
+	width: 180px;
+	margin: 10px;
 }

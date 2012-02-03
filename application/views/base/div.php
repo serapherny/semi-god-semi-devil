@@ -1,13 +1,13 @@
-<div class="<?php if (isset($class)) echo $class;?>">
+<?php if (isset($class)) {?><div class="<?php echo $class;?>"><?php }?>
 
 <?php if (is_array($content)){
-        foreach($content as $sub_content) { ?>
-          <div class="<?php if (isset($sub_class)) echo $sub_class;?>">
-          <?php echo $sub_content;?>
-          </div>
+        foreach($content as $sub_content) {?> 
+          <?php if (isset($sub_class)) {?><div class="<?php echo $sub_class;?>"><?php }?>
+            <?php echo $sub_content;?>
+          <?php if (isset($sub_class)) {?></div><?php }?>
 <?php   }
       } else {
         echo $content;
       }?>
 
-</div>
+<?php if (isset($class)) {?></div><?php }?>

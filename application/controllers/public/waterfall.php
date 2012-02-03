@@ -3,16 +3,27 @@
 require_once LIB.'ent/item.php';
 
 class Waterfall extends CI_Controller {
-  const MAX_WIDTH = 800;
+  const MAX_WIDTH = 1000;
   const COLUMN = 5;
   
   function __construct() {
     parent::__construct();
   }
 
+  protected function renderItemBlock($id) {
+    return $this->load->view('ent/item_box',
+                              array('debug_height' => rand(200,600)),
+                              true);
+  }
+  
   protected function renderSingleFall($fall_width) {
+    $items = array();
+    for ($i=0; $i<50; $i++) {
+      $items[] = $this->renderItemBlock($i);
+    }
     return $this->load->view('waterfall/single_fall', 
-                              array("fall_width" => $fall_width),
+                              array('fall_width' => $fall_width,
+                                    'content' => $items),
                               true);
   }
   

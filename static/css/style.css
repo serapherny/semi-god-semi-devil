@@ -54,7 +54,7 @@ p.footer{
 }
 
 #container{
-	width: 810px;
+	width: 1010px;
 	margin: 10px auto;
 	border: 1px solid #D0D0D0;
 	-webkit-box-shadow: 0 0 8px #D0D0D0;
@@ -151,12 +151,14 @@ p.footer{
 /* header */
 
 .top-menu-bar {
-  width: 810px;
+  width: 1010px;
 }
 
 .mainmenu-filter {
   float: left;
-  width: 200px;
+  margin-top: -15px;
+  width: 130px;
+  height: 30px;
   background: #dddddd;
 }
 
@@ -169,7 +171,7 @@ p.footer{
 /* main-area */
 #main-area {
   clear: both;
-  width: 810px;
+  width: 1010px;
   min-height: 500px;
   margin: 10px auto;
 }
