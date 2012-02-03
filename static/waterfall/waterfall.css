@@ -1,0 +1,9 @@
+.single-fall {
+	float: left;
+	border: black 1px solid;
+	height: 500px;
+}
+
+.waterfall {
+	width: 820px;
+}

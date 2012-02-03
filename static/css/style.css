@@ -54,7 +54,8 @@ p.footer{
 }
 
 #container{
-	margin: 10px;
+	width: 810px;
+	margin: 10px auto;
 	border: 1px solid #D0D0D0;
 	-webkit-box-shadow: 0 0 8px #D0D0D0;
 }
@@ -144,3 +145,31 @@ p.footer{
 /* font-color */
 .color_red { color: red; }
 .color_green { color: olive; }
+
+/* Starting from here, the site-wide css. */
+
+/* header */
+
+.top-menu-bar {
+  width: 810px;
+}
+
+.mainmenu-filter {
+  float: left;
+  width: 200px;
+  background: #dddddd;
+}
+
+.search_box {
+  float: right;
+  width: 200px;
+  margin-top: -50px;
+}
+
+/* main-area */
+#main-area {
+  clear: both;
+  width: 810px;
+  min-height: 500px;
+  margin: 10px auto;
+}
