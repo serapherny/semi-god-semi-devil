@@ -48,5 +48,7 @@ define('IMG',         STATIC_DIR.'images/');
 define('CSS',         STATIC_DIR.'css/');
 define('JS',          STATIC_DIR.'js');
 
+require_once LIB.'xhp/init.php';
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

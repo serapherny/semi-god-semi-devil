@@ -151,7 +151,7 @@ p.footer{
 /* header */
 
 .top-menu-bar {
-  width: 1010px;
+	width: 100%;
 }
 
 .mainmenu-filter {
@@ -171,7 +171,7 @@ p.footer{
 /* main-area */
 #main-area {
   clear: both;
-  width: 1010px;
+  width: 100%;
   min-height: 500px;
   margin: 10px auto;
 }

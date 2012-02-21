@@ -1,62 +1,83 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once LIB.'ent/item.php';
+require_once LIB.'ui/clear.php';
+require_once LIB.'ui/user_profile.php';
+require_once LIB.'ui/waterfall/item_box.php';
 
 class Waterfall extends CI_Controller {
   const MAX_WIDTH = 1000;
   const COLUMN = 5;
+  const USER_PROFILE_WIDTH = 180;
   
   function __construct() {
     parent::__construct();
   }
 
+  /* Indirect rendering functions. */
+  
   protected function renderItemBlock($id) {
-    return $this->load->view('ent/item_box',
-                              array('debug_height' => rand(200,600)),
-                              true);
+    return <ui:item_box height={rand(200,600)} />;
   }
   
   protected function renderSingleFall($fall_width) {
-    $items = array();
-    for ($i=0; $i<50; $i++) {
-      $items[] = $this->renderItemBlock($i);
+    $style = "width:".$fall_width."px;";
+    $container = <div class="single-fall" style={$style} />;
+    for ($i=0; $i<5; $i++) {
+      $container->appendChild($this->renderItemBlock($i));
     }
-    return $this->load->view('waterfall/single_fall', 
-                              array('fall_width' => $fall_width,
-                                    'content' => $items),
-                              true);
+    return $container;
   }
   
-  protected function renderMainPanel($max_width, $column) {
-    $falls = array();
+  protected function renderWaterfall($max_width, $column) {
+    if ($column < 1) return <div />;
+    $container = <div class="waterfall"/>;
     $single_width = round($max_width / $column);
-    for($width = 0; $width < $max_width; $width += $single_width) {
-      $falls[] = $this->renderSingleFall($single_width, '', true);
+    for($width = 0; $width < $max_width; $width += $single_width + 1) {
+      $container->appendChild($this->renderSingleFall($single_width));
     }
-    $falls[] = $this->load->view('base/clear','',true);
-    $this->load->view('base/div', array('content'=> $falls,
-                                        'class' => 'waterfall'));
+    $container->appendChild(<ui:clear/>);
+    return $container;
   }
   
-  protected function renderUserProfile() {
-    //$this->load->view('waterfall/user_profile');
+  /* Directly rendering functions. */
+  
+  protected function renderLeftColumn($loggin) {
+    if ($loggin) {
+      return <ui:user_profile />;
+    }
   }
   
-  protected function renderTopMenu() {
-    $filter = $this->load->view('widget/product_filter', '', true);
-    $filter = array($filter, $this->load->view('base/clear','',true));
-    $this->load->view('base/div', array('content'=> $filter,
-                                        'class' => 'top-menu-bar'));
+  protected function renderRightColumn($loggin) {
+    $container = <div />;
+    $top_filter = <div class="top-menu-bar">
+                    <div class="mainmenu-filter">
+                      <a href="#">Filter by category</a>
+                    </div>
+                  </div>;
+    
+    $container->appendChild($top_filter);
+    
+    if ($loggin) {
+      $container->addClass('with_user_profile');
+      $container->appendChild($this->renderWaterfall(
+          self::MAX_WIDTH - self::USER_PROFILE_WIDTH, self::COLUMN - 1));
+    } else {
+      $container->appendChild($this->renderWaterfall(
+          self::MAX_WIDTH, self::COLUMN));
+    }
+    return $container;
   }
   
   public function index() {
     $data = array('css_files' => array('css/style.css', 
                                        'waterfall/waterfall.css'),
                   'page_title'=>'广场');
-    $this->load->view('header', $data);
-    $this->renderUserProfile();
-    $this->renderTopMenu();
-    $this->renderMainPanel(self::MAX_WIDTH, self::COLUMN);
-    $this->load->view('footer');
+    echo $this->load->view('header', $data, true);
+    $loggin = true;
+    $left_col = $this->renderLeftColumn($loggin);
+    $right_col = $this->renderRightColumn($loggin);
+    echo <div>{$left_col}{$right_col}</div>;
+    echo $this->load->view('footer', array(), true);
   }
 }
