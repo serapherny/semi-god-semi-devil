@@ -20,12 +20,13 @@ class Photo_model extends CI_Model {
   }
   
   public function get_photo_data($photo_id_list, &$response_content) {
+    if (!is_array(($photo_id_list))) {
+      $photo_id_list = array($photo_id_list);
+    }
     $response_content = array();
     $this->db->where_in('sid', $photo_id_list);
     $query = $this->db->get('photo');
-    foreach ($query->result_array() as $row) {
-      $response_content[] = array('photo'=>$row);
-    }
+    $response_content[] = $query->result_array();
     return 'suc';
   }
   

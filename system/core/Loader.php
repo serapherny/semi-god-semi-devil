@@ -185,7 +185,8 @@ class CI_Loader {
 
 		if (in_array($name, $this->_ci_models, TRUE))
 		{
-			return;
+		    $CI =& get_instance();
+			return $CI->$name;
 		}
 
 		$CI =& get_instance();
@@ -225,7 +226,7 @@ class CI_Loader {
 			$CI->$name = new $model();
 
 			$this->_ci_models[] = $name;
-			return;
+			return $CI->$name;
 		}
 
 		// couldn't find the model

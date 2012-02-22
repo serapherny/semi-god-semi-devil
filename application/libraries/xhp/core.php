@@ -62,6 +62,9 @@ abstract class :x:composable-element extends :x:base {
   private
     $attributes,
     $children;
+  
+  protected
+    $loader;
 
   // Private constants indicating the declared types of attributes
   const TYPE_STRING = 1;
@@ -73,7 +76,9 @@ abstract class :x:composable-element extends :x:base {
   const TYPE_ENUM   = 7;
   const TYPE_FLOAT  = 8;
 
-  protected function init() {}
+  protected function init() {
+    $this->loader = $GLOBALS['loader'];
+  }
 
   /**
    * A new :x:composable-element is instantiated for every literal tag
@@ -215,6 +220,7 @@ abstract class :x:composable-element extends :x:base {
           if (:x:base::$ENABLE_VALIDATION) {
             $child->validateChildren();
           }
+          $child->prepare();
           $child = $child->render();
         } while ($child instanceof :x:element);
 
@@ -571,6 +577,9 @@ abstract class :x:primitive extends :x:composable-element {
  * of markup.
  */
 abstract class :x:element extends :x:composable-element {
+  
+  protected function prepare() {}
+  
   final public function __toString() {
     $that = $this;
 

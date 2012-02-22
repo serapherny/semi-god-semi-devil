@@ -81,9 +81,6 @@ class Photo_rpc extends CI_Controller {
         */
         case 'get_photo_data':
           $photo_id_list = $content['photo_id_list'];
-          if (!is_array($photo_id_list)) {
-            $photo_id_list = array($photo_id_list);
-          }
           $this->load->model('ent/photo_model', 'photo_model');
           $action_result = $this->photo_model->get_photo_data($photo_id_list, &$response_content);
           break;  

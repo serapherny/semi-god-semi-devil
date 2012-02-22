@@ -50,6 +50,8 @@ class CI_Controller {
 
 		$this->load->set_base_classes()->ci_autoloader();
 		
+		$GLOBALS['loader'] =& $this->load;
+		
 		log_message('debug', "Controller Class Initialized");
 	}
 
