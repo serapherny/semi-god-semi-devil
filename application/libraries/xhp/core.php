@@ -62,9 +62,6 @@ abstract class :x:composable-element extends :x:base {
   private
     $attributes,
     $children;
-  
-  protected
-    $loader;
 
   // Private constants indicating the declared types of attributes
   const TYPE_STRING = 1;
@@ -76,9 +73,7 @@ abstract class :x:composable-element extends :x:base {
   const TYPE_ENUM   = 7;
   const TYPE_FLOAT  = 8;
 
-  protected function init() {
-    $this->loader = $GLOBALS['loader'];
-  }
+  protected function init() {}
 
   /**
    * A new :x:composable-element is instantiated for every literal tag
@@ -220,7 +215,6 @@ abstract class :x:composable-element extends :x:base {
           if (:x:base::$ENABLE_VALIDATION) {
             $child->validateChildren();
           }
-          $child->prepare();
           $child = $child->render();
         } while ($child instanceof :x:element);
 
@@ -577,9 +571,23 @@ abstract class :x:primitive extends :x:composable-element {
  * of markup.
  */
 abstract class :x:element extends :x:composable-element {
-  
+
+  protected
+    $loader;
+
+  protected function init() {
+    $this->loader = $GLOBALS['loader'];
+  }
+
   protected function prepare() {}
-  
+
+  public function _prepare() {
+    if (!isset($this->prepared) || $this->prepared == false) {
+      $this->prepare();
+      $this->prepared = true;
+    }
+  }
+
   final public function __toString() {
     $that = $this;
 
@@ -587,8 +595,10 @@ abstract class :x:element extends :x:composable-element {
       // Validate the current object
       $that->validateChildren();
 
+      $that->_prepare();
       // And each intermediary object it returns
       while (($that = $that->render()) instanceof :x:element) {
+        $that->_prepare();
         $that->validateChildren();
       }
 
@@ -597,8 +607,11 @@ abstract class :x:element extends :x:composable-element {
         throw new XHPCoreRenderException($this, $that);
       }
     } else {
+      $that->_prepare();
       // Skip the above checks when not validating
-      while (($that = $that->render()) instanceof :x:element);
+      while (($that = $that->render()) instanceof :x:element) {
+        $that->_prepare();
+      }
     }
 
     return $that->__toString();
