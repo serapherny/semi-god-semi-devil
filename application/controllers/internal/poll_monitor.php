@@ -6,7 +6,7 @@ class Poll_monitor extends CI_Controller {
   function __construct() {
     parent::__construct();
   }
-  
+
   public function create_poll() {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('usid', '作者sid', 'required');
@@ -41,7 +41,7 @@ class Poll_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function poll_data() {
     $this->load->library('form_validation');
     // Check if the fields have been fulfilled.
@@ -68,7 +68,7 @@ class Poll_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function index() {
     $this->load->helper('url');
     $this->load->helper('form');
@@ -80,12 +80,16 @@ class Poll_monitor extends CI_Controller {
       default: break;
     }
     $this->load->model('ent/poll_model', 'poll_model');
+
+  	$data = array('css_files' => array('css/style.css'),
+  	  	          'page_title'=>'投票管理');
+  	$this->load->view('header', $data);
+
     $data = array('poll_list' => $this->poll_model->get_poll_list(),
                   'rebuild_db_page' => site_url('internal/rebuild_db?table=poll'),
-                  'action_result' => $action_result               
-    );
-    $this->load->view('header', array('page_title'=>'投票管理'));
+                  'action_result' => $action_result);
   	$this->load->view('internal/poll_monitor', $data);
+
   	$this->load->view('footer');
   }
 }

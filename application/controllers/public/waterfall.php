@@ -7,19 +7,17 @@ require_once LIB.'ui/waterfall/item_box.php';
 
 class Waterfall extends CI_Controller {
   const MAX_WIDTH = 1000;
-  const COLUMN = 5;
+  const COLUMN = 4;
   const USER_PROFILE_WIDTH = 180;
-  
+
   function __construct() {
     parent::__construct();
   }
 
-  /* Indirect rendering functions. */
-  
   protected function renderItemBlock($id) {
-    return <ui:item_box height={rand(200,600)} />;
+    return <ui:item_box />;
   }
-  
+
   protected function renderSingleFall($fall_width) {
     $style = "width:".$fall_width."px;";
     $container = <div class="single-fall" style={$style} />;
@@ -28,7 +26,7 @@ class Waterfall extends CI_Controller {
     }
     return $container;
   }
-  
+
   protected function renderWaterfall($max_width, $column) {
     if ($column < 1) return <div />;
     $container = <div class="waterfall"/>;
@@ -39,15 +37,13 @@ class Waterfall extends CI_Controller {
     $container->appendChild(<ui:clear/>);
     return $container;
   }
-  
-  /* Directly rendering functions. */
-  
+
   protected function renderLeftColumn($loggin) {
     if ($loggin) {
       return <ui:user_profile />;
     }
   }
-  
+
   protected function renderRightColumn($loggin) {
     $container = <div />;
     $top_filter = <div class="top-menu-bar">
@@ -55,9 +51,9 @@ class Waterfall extends CI_Controller {
                       <a href="#">Filter by category</a>
                     </div>
                   </div>;
-    
+
     $container->appendChild($top_filter);
-    
+
     if ($loggin) {
       $container->addClass('with_user_profile');
       $container->appendChild($this->renderWaterfall(
@@ -68,9 +64,9 @@ class Waterfall extends CI_Controller {
     }
     return $container;
   }
-  
+
   public function index() {
-    $data = array('css_files' => array('css/style.css', 
+    $data = array('css_files' => array('css/style.css',
                                        'waterfall/waterfall.css'),
                   'page_title'=>'广场');
     echo $this->load->view('header', $data, true);

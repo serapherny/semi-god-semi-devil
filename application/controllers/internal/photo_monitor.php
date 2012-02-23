@@ -9,20 +9,20 @@ class Photo_monitor extends CI_Controller {
 
   public function create_photo() {
     $this->load->helper(array('form', 'url', 'file'));
-    
+
     // This path is for website temp use only.
     $config['upload_path'] = './uploads/';
     $config['allowed_types'] = 'gif|jpg|png'; // pic last if contains non-pic.
     $config['max_size'] = '5000'; // I guess it use KB as unit.
     $config['max_width']  = '3000';
     $config['max_height']  = '2000';
-    
+
     $this->load->library('upload', $config);
     $this->load->library('form_validation');
     $this->form_validation->set_rules('usid', '用户ID', 'required');
     // The outer lib functino checks inputs.
     if ($this->form_validation->run() == TRUE ) {
-      
+
       // The inner function checks upload result.
       if ( $this->upload->do_upload()) {
         // It gets an array of all info of uploaded file.
@@ -63,7 +63,7 @@ class Photo_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function photo_data() {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('sid', '照片sid', 'required');
@@ -90,7 +90,7 @@ class Photo_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function index() {
     $this->load->helper('url');
     $this->load->helper('form');
@@ -102,12 +102,17 @@ class Photo_monitor extends CI_Controller {
       default: break;
     }
     $this->load->model('ent/photo_model', 'photo_model');
+
+    $data = array('css_files' => array('css/style.css'),
+                  'page_title'=>'图片管理');
+    $this->load->view('header', $data);
+
     $data = array('photo_list' => $this->photo_model->get_photo_list(),
-                  'rebuild_db_page' => site_url('internal/rebuild_db?table=photo'),
-                  'action_result' => $action_result               
-    );
-    $this->load->view('header', array('page_title'=>'图片管理'));
+                      'rebuild_db_page' => site_url('internal/rebuild_db?table=photo'),
+                      'action_result' => $action_result);
+
   	$this->load->view('internal/photo_monitor', $data);
+
   	$this->load->view('footer');
   }
 }

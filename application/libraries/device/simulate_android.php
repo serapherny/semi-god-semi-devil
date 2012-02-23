@@ -5,31 +5,31 @@ require_once LIB.'ent/device.php';
 class Simulate_android {
   function __construct() {
   }
-  
+
   public function set_xmlrpc($xmlrpc) {
     $this->xmlrpc_ = $xmlrpc;
     return $this;
   }
-  
+
   public function send_rpc($action, $content, $type) {
-    
+
     $rpcs = array('user_rpc', 'photo_rpc', 'poll_rpc');
-    
+
     if (!in_array($type, $rpcs)) {
       return 'Failed: unsupported rpc type.';
     }
-    
+
     $this->xmlrpc_->server(site_url('rpcs/'.$type), 10088);
     $this->xmlrpc_->method($action);
-    
+
     //======================================================
     //    Uncomment this for debugging use.
-    
+
     //$this->xmlrpc_->set_debug(TRUE);
-    
+
     //
     //======================================================
-    
+
     /*
      * Don't change this. It is not easy to go right.
      */
@@ -43,7 +43,7 @@ class Simulate_android {
                          ),
                    'struct'
     ));
-      
+
     $this->xmlrpc_->request($request);
     if ( ! $this->xmlrpc_->send_request()) {
       return $this->xmlrpc_->display_error();
@@ -52,7 +52,7 @@ class Simulate_android {
       return $this->xmlrpc_->display_response();
     }
   }
-  
+
   private $xmlrpc_;
 }
 

@@ -1,1 +1,0 @@
-<img class="height_section" src="<?php echo IMG?>muzhi.jpeg"/>

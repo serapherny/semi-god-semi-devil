@@ -6,7 +6,7 @@ class User_monitor extends CI_Controller {
   function __construct() {
     parent::__construct();
   }
-  
+
   public function create_user() {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('nickname', '用户名', 'required');
@@ -39,7 +39,7 @@ class User_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function user_data() {
     $this->load->library('form_validation');
     // Check if the fields have been fulfilled.
@@ -66,7 +66,7 @@ class User_monitor extends CI_Controller {
     }
     return $action_result;
   }
-  
+
   public function bind_user() {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('sid_bind', '用户名');
@@ -111,12 +111,17 @@ class User_monitor extends CI_Controller {
       default: break;
     }
     $this->load->model('ent/user_model', 'user_model');
+
+  	$data = array('css_files' => array('css/style.css'),
+  	              'page_title'=>'用户管理');
+  	$this->load->view('header', $data);
+
     $data = array('user_list' => $this->user_model->get_user_list(),
                   'rebuild_db_page' => site_url('internal/rebuild_db?table=user'),
-                  'action_result' => $action_result               
-    );
-    $this->load->view('header', array('page_title'=>'用户管理'));
+                  'action_result' => $action_result);
+
   	$this->load->view('internal/user_monitor', $data);
+
   	$this->load->view('footer');
   }
 }

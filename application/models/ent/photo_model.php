@@ -3,7 +3,7 @@
 require_once LIB.'ent/photo.php';
 
 class Photo_model extends CI_Model {
-  
+
   public function __construct() {
     parent::__construct();
   }
@@ -18,7 +18,7 @@ class Photo_model extends CI_Model {
     }
     return $result_set;
   }
-  
+
   public function get_photo_data($photo_id_list, &$response_content) {
     if (!is_array(($photo_id_list))) {
       $photo_id_list = array($photo_id_list);
@@ -26,14 +26,14 @@ class Photo_model extends CI_Model {
     $response_content = array();
     $this->db->where_in('sid', $photo_id_list);
     $query = $this->db->get('photo');
-    $response_content[] = $query->result_array();
+    $response_content = $query->result_array();
     return 'suc';
   }
-  
+
   public function upload_photo($photo, &$response_content) {
 
     $response_content = array();
-    
+
     if (!$photo instanceof Photo) {
       return 'failed : not a valid instance of Photo.';
     } else {
@@ -41,41 +41,41 @@ class Photo_model extends CI_Model {
       $date_dir = mdate('%Y%m%d', $photo->get_create_time());
       $file_path = './photos/'.$date_dir;
       $photo->set_file_path($file_path);
-      
+
       $file_name = random_string('alpha', 10);
       $photo->set_file_name($file_name);
-      
+
       $file_ext = $photo->get_file_ext();
-      
+
       $this->load->helper('file');
       $this->load->helper('directory');
-      
+
       $map = directory_map('./photos/', 1);
       if (!in_array($date_dir, $map)) {
         mkdir('./photos/'.$date_dir);
       }
-      
+
       $written = $photo->save_binary_to_file(
          $file_path.'/'.$file_name.$file_ext);
-      
+
       if (!$written) {
         return 'failed: not able to file:'.
                $file_path.'/'.$file_name.$file_ext;
       }
-      
+
       $response_content['file_path'] = $file_path.'/'.$file_name.$file_ext;
-      
+
       $blacklist = array('binary');
-      
+
       $photo_entry = $photo->to_array($compressed = true, $filter_null = true, $blacklist);
       $this->db->insert('photo', $photo_entry);
-      
+
       $response_content['sid'] = $photo_entry['sid'];
-      
+
       return 'suc';
     }
   }
-  
+
 
 }
 
