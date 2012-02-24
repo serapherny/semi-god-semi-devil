@@ -1,51 +1,56 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once LIB.'ent/photo.php';
+require_once MODEL.'ent/ent_model.php';
 
-class Photo_model extends CI_Model {
+class Photo_model extends Ent_model {
 
   public function __construct() {
     parent::__construct();
   }
 
-  public function get_photo_list($limit = 100, $offset = 0) {
-    $result_set = array();
-    $query = $this->db->get('photo', $limit, $offset);
-    foreach ($query->result_array() as $row) {
-      $photo = new Photo();
-      $photo->load_array($row, $blacklist = array());
-      $result_set[] = array('photo'=>$photo);
-    }
-    return $result_set;
+  protected function tableName() {
+    return 'photo';
   }
 
-  public function get_photo_data($photo_id_list, &$response_content) {
-    if (!is_array(($photo_id_list))) {
-      $photo_id_list = array($photo_id_list);
-    }
-    $response_content = array();
-    $this->db->where_in('sid', $photo_id_list);
-    $query = $this->db->get('photo');
-    $response_content = $query->result_array();
-    return 'suc';
+  protected function typeName() {
+    return 'Photo';
   }
 
-  public function upload_photo($photo, &$response_content) {
+  /*
+   * Upload a photo to the database. The $photo_ent must be an object of Photo;
+   *
+   * if succeeds, this function returns a full Photo entity; else it returns
+   * a string showing the detailed error.
+   *
+   */
 
-    $response_content = array();
+  // We don't save binary to database; only file infos.
+  protected function insertBlacklist() {
+    return array('binary');
+  }
 
-    if (!$photo instanceof Photo) {
+  public function upload_photo($photo_ent) {
+
+    if (!$photo_ent instanceof Photo) {
       return 'failed : not a valid instance of Photo.';
     } else {
-      $photo->set_create_time(now());
-      $date_dir = mdate('%Y%m%d', $photo->get_create_time());
+      // Check if the photo has all info needed.
+      if (!$photo_ent->validateNewPhotoData()) {
+        return 'failed : ont enough new photo data.';
+      }
+
+      // Autofill the rest of the ent.
+      $photo_ent->set('create_time', now());
+      $date_dir = mdate('%Y%m%d', $photo_ent->get('create_time'));
+
       $file_path = './photos/'.$date_dir;
-      $photo->set_file_path($file_path);
+      $photo_ent->set('file_path', $file_path);
 
       $file_name = random_string('alpha', 10);
-      $photo->set_file_name($file_name);
+      $photo_ent->set('file_name', $file_name);
 
-      $file_ext = $photo->get_file_ext();
+      $file_ext = $photo_ent->get('file_ext');
 
       $this->load->helper('file');
       $this->load->helper('directory');
@@ -55,9 +60,10 @@ class Photo_model extends CI_Model {
         mkdir('./photos/'.$date_dir);
       }
 
-      $written = $photo->save_binary_to_file(
+      $written = $photo_ent->save_binary_to_file(
          $file_path.'/'.$file_name.$file_ext);
 
+      // For the cases that file are not successfully created.
       if (!$written) {
         return 'failed: not able to file:'.
                $file_path.'/'.$file_name.$file_ext;
@@ -65,14 +71,10 @@ class Photo_model extends CI_Model {
 
       $response_content['file_path'] = $file_path.'/'.$file_name.$file_ext;
 
-      $blacklist = array('binary');
+      $this->insert($photo_ent);
 
-      $photo_entry = $photo->to_array($compressed = true, $filter_null = true, $blacklist);
-      $this->db->insert('photo', $photo_entry);
-
-      $response_content['sid'] = $photo_entry['sid'];
-
-      return 'suc';
+      // At this point, everything is good, return the filled ent.
+      return $photo_ent;
     }
   }
 

@@ -43,7 +43,8 @@ class Photo_rpc extends CI_Controller {
     // validatePost returns FALSE if not valid.
     if ($content !== FALSE) {
       $action_result = 'failed : no such command.';
-
+      $this->load->model('ent/photo_model', 'photo_model');
+      $response_content = array();
       switch($cmd) {
         /*
          * ==========================================================
@@ -53,17 +54,17 @@ class Photo_rpc extends CI_Controller {
         case 'upload_photo':
 
           $photo = new Photo();
-          $blacklist = array();
-          $photo->load_array($content, $blacklist)->new_sid();
-          $valid = $photo->validateNewPhotoData();
+          $photo->load_array($content)->new_sid();
 
-          if (!$valid) {
-            $action_result = 'failed : not valid or not enough new photo data.';
-            break;
+          $photo = $this->photo_model->upload_photo($photo);
+          if ($photo instanceof Photo) {
+            $action_result = 'suc';
+            $response_content['photo'] = $photo->to_array($zipped = false,
+                                                          array('binary'),
+                                                          'blacklist');
+          } else {
+            $action_result = $photo;
           }
-
-          $this->load->model('ent/photo_model', 'photo_model');
-          $action_result = $this->photo_model->upload_photo($photo, &$response_content);
           break;
 
         /*
@@ -81,8 +82,11 @@ class Photo_rpc extends CI_Controller {
         */
         case 'get_photo_data':
           $photo_id_list = $content['photo_id_list'];
-          $this->load->model('ent/photo_model', 'photo_model');
-          $action_result = $this->photo_model->get_photo_data($photo_id_list, &$response_content);
+          $ent_list = $this->photo_model->get_ents($photo_id_list);
+          foreach ($ent_list as $sid => $ent) {
+            $response_content[$sid] = $ent->to_array($zipped = false);
+          }
+          $action_result = 'suc';
           break;
 
         /*

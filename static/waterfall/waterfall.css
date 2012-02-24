@@ -21,4 +21,8 @@
 .item-box {
 	border: black 1px solid;
 	margin: 10px;
+	overflow: hidden;
+}
+
+.item-box img{
 }

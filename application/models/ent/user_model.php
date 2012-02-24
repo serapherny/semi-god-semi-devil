@@ -1,103 +1,43 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once LIB.'ent/user.php';
+require_once MODEL.'ent/ent_model.php';
 
-class User_model extends CI_Model {
-  
+class User_model extends Ent_model {
+
   public function __construct() {
     parent::__construct();
   }
 
-  public function get_user_list($limit = 100, $offset = 0) {
-    $result_set = array();
-    $query = $this->db->get('user', $limit, $offset);
-    foreach ($query->result_array() as $row) {
-      $user = new User();
-      $user->load_array($row, $blacklist = array());
-      $result_set[] = array('user'=>$user);
-    }
-    return $result_set;
+  protected function tableName() {
+    return 'user';
   }
-  
-  public function update_user($user) {
-    if (!$user instanceof User) {
-      log_message('error', 'Adding an invalid user.');
-    } else {
-  
-    }
+
+  protected function typeName() {
+    return 'User';
   }
-  
-  public function delete_user($id) {
-    if (!$user instanceof User) {
-      log_message('error', 'Adding an invalid user.');
-    } else {
-    }
-  }
-  
-  public function get_user_data($user_list, $user_ents) {
-    $user_ents = array();
-    $this->db->where_in('sid', $user_list);
-    $query = $this->db->get('user');
-    foreach ($query->result_array() as $row) {
-      $user_ents[] = array('user'=>$row);
-    }
-    return 'suc';
-  }  
-  
-  public function get_myself($user, &$response_content) {
-    $response_content = array();
-    if (!$user instanceof User) {
-      log_message('error', 'You are not an invalid user in database.');
-      return 'failed : You are not an invalid user in database.';
-    } else {
-      $this->db->where('last_device', $user->get_last_device());
-      $this->db->order_by('last_login_time', 'desc');
-      $query = $this->db->get('user', 1, 0);
-      foreach ($query->result_array() as $row) {
-        $response_content[] = array('user'=>$row);
-      }
-      return 'suc';
-    }
-  }
-  
-  public function create_user($user) {
-    if (!$user instanceof User) {
+
+  /*
+   * Customized insertion function.
+   */
+  public function create_user($user_ent) {
+    if (!$user_ent instanceof User) {
       return 'failed : not a valid instance of User.';
     } else {
-      $this->db->where('email_addr', $user->get_email_addr());
-      $query = $this->db->get('user', 1, 0);
-      if ($query->num_rows() > 0) {
+      $this->db->where('email_addr', $user_ent->get('email_addr'));
+      $this->db->from('user');
+      if ($this->db->count_all_results() > 0) {
         return 'failed : email exists in database.';
       }
-      // Here we are sure that insert can proceed.
-      $blacklist = array();
-      $user->set_create_time(now())->set_last_login_time(now());
-      $user_rec = $user->to_array($compressed = true, $filter_null = true, $blacklist);
-      $this->db->insert('user', $user_rec);
-      
-      return 'suc';
-    }
-  }
-  
-  public function bind_user($user) {
-    if (!$user instanceof User) {
-      log_message('error', 'Adding an invalid user.');
-    } else {
-      $this->db->where('email_addr', $user->get_email_addr());
-      $this->db->where('password', $user->get_password());
-      $query = $this->db->get('user', 1, 0);
-      if ($query->num_rows() == 0) {
-        return 'failed : email not existed in database or wrong password.';
+      $this->db->flush_cache();
+
+      $user_ent->set('create_time',now())->set('last_login_time',now());
+      $report = $this->insert($user_ent);
+      if ($report[$user_ent->get('sid')] == 'inserted') {
+        return $user_ent;
+      } else {
+        return $report[$user_ent->get('sid')];
       }
-      
-      // Here we are sure that the update can proceed.
-      $user->set_last_login_time(now());
-      $whitelist = array('last_device', 'last_login_time');
-      $user_rec = $user->to_array($compressed = true, $filter_null = false, $whitelist, true);
-      $this->db->where('email_addr', $user->get_email_addr());
-      $this->db->update('user', $user_rec);
-      
-      return 'suc';
     }
   }
 }

@@ -4,8 +4,14 @@
 
 <h2 class="clr_l">已有用户列表</h2>
 <ul>
-  <?php foreach($user_list as $user_rec):?>
-    <li><?php $this->load->view('ent/user_li', $user_rec);?></li>
+  <?php foreach($user_list as $user):?>
+    <li>(<?php echo $user->get('sid');?>)
+        <?php echo $user->get('nickname');?>,
+        <?php echo $user->get('password');?>,
+        <?php echo $user->get('email_addr');?>,
+        <?php echo $user->get('create_time');?>,
+        <?php echo standard_date('DATE_RFC1123', $user->get('last_login_time'));?>
+    </li>
   <?php endforeach;?>
 </ul>
 
@@ -22,14 +28,6 @@
 	用户sid：<input type="text" name="sid_data" />
 	<input type="hidden" name="mode" value="data" />
 	<button type="submit">用户信息</button>
-</form>
-
-<?php echo form_open(uri_string()); ?>
-	用户sid：<input type="text" name="sid_bind" />
-	邮箱：<input type="text" name="email_bind"/>
-	密码：<input type="text" name="password_bind" />
-	<input type="hidden" name="mode" value="bind" />
-	<button type="submit">Bind用户</button>
 </form>
 
 <div class="margin_tb height_bar">

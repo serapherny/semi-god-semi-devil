@@ -4,152 +4,50 @@ require_once LIB.'base/ent.php';
 require_once LIB.'ent/device.php';
 
 class User extends Ent {
- 
-  private
-    $email_addr_ = NOT_SET,
-    $nickname_ = NOT_SET,
-    $password_ = NOT_SET,
-    $profile_photo = NOT_SET,  // class Photo or int
-    $last_device_ = NOT_SET,
-    $create_time_ = NOT_SET,
-    $last_login_time_ = NOT_SET,
-    $device_list_ = array();
-  
-  public function BaseFieldsArray() {
-    return array_merge(
-      array('nickname', 
-            'email_addr', 
-            'password',
-            'last_device', 
-            'last_login_time'),
-      parent::BaseFieldsArray()
-    );
-  }
-  
-  public function CompressableFieldsArray($compressed) {
-    if ($compressed){
-      $fields = array('user_info');
-    } else {
-      $fields = array('device_list', 'create_time');
-    }
-    return array_merge($fields, parent::BaseFieldsArray());
-  }
-    
+
   public function __construct() {
     parent::__construct();
     $this->set_type(EntType::EntUser);
   }
-  
+
+  public function BaseFieldsArray() {
+    return array_merge(
+      array('nickname',
+            'email_addr',
+            'password',
+            'last_login_time',
+            'create_time',
+            'user_info'),
+      parent::BaseFieldsArray()
+    );
+  }
+
+  public function ZipFieldsArray($zipped) {
+    if ($zipped){
+      $fields = array('friendlist');
+    } else {
+      $fields = array('friends');
+    }
+    return $fields;
+  }
+
+  //=====================================================================
+  // The followings are special member functions.
+  //=====================================================================
+
   public function validateBasicDataForNewUser() {
     return $this->nickname_ !== NOT_SET &&
            $this->password_ !== NOT_SET;
   }
-  
-  private function validateDeviceIdentifiable() {
-    return $this->last_device_ !== NOT_SET;
-  }
-  
+
   private function validateUserIdentifiable() {
     return $this->email_addr_ !== NOT_SET ||
            $this->get_sid() !== NOT_SET;
   }
-  
+
   private function validateLoginable() {
     return $this->validateUserIdentifiable() &&
            $this->password_ !== NOT_SET;
   }
-  
-  public function validateIdentifiable() {
-    return $this->validateUserIdentifiable() ||
-           $this->validateDeviceIdentifiable();
-  }
-  
-  public function validateBindable() {
-    return $this->validateLoginable() &&
-           $this->validateDeviceIdentifiable(); 
-  }
-  
-  public function set_nickname($nickname) {
-    $this->nickname_ = $nickname;
-    return $this;
-  }
-  
-  public function get_nickname() {
-      return $this->nickname_;
-  }
-  
-  public function set_password($password) {
-    $this->password_ = $password;
-    return $this;
-  }
-  
-  public function get_password() {
-    return $this->password_;
-  }
-  
-  public function set_email_addr($email_addr) {
-    $this->email_addr_ = $email_addr;
-    return $this;
-  }
-  
-  public function get_email_addr() {
-    return $this->email_addr_;
-  }
-  
-  public function add_device($device_id) {
-    // Device class will determine whether this id is valid.
-    if (Device::is_device_id($device_id)) {
-      if (!isset($this->device_list_[$device_id])) {
-        // Record adding time of a device.
-        $this->device_list_[$device_id] = now();
-      }
-    } else {
-      log_message('error', 'Adding invalid device id.');
-    }
-    return $this;
-  }
-  
-  public function get_device_list() {
-    return $this->device_list_;
-  }
-  
-  public function set_last_device($device_id) {
-    if (Device::is_device_id($device_id)) {
-      $this->last_device_ = $device_id;
-      $this->add_device($device_id);
-    } else {
-      log_message('error', 'Adding invalid device id.');
-    }
-    return $this;
-  }
-  
-  public function get_last_device() {
-    return $this->last_device_;
-  }
-  
-  public function set_create_time($create_time) {
-    $this->create_time_ = $create_time;
-    return $this;
-  }
-  
-  public function get_create_time() {
-    return $this->create_time_;
-  }
-  
-  public function set_last_login_time($login_time) {
-    $this->last_login_time_ = $login_time;
-    return $this;
-  }
-  
-  public function get_last_login_time() {
-    return $this->last_login_time_;
-  }
-  
-  public function get_user_info() {
-    return 'compressed';
-  }
-  
-  public function set_user_info() {
-    return $this;
-  }
+
 }

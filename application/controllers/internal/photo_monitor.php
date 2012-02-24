@@ -107,9 +107,9 @@ class Photo_monitor extends CI_Controller {
                   'page_title'=>'图片管理');
     $this->load->view('header', $data);
 
-    $data = array('photo_list' => $this->photo_model->get_photo_list(),
-                      'rebuild_db_page' => site_url('internal/rebuild_db?table=photo'),
-                      'action_result' => $action_result);
+    $data = array('photo_list' => $this->photo_model->get_id_list(),
+                  'rebuild_db_page' => site_url('internal/rebuild_db?table=photo'),
+                  'action_result' => $action_result);
 
   	$this->load->view('internal/photo_monitor', $data);
 
