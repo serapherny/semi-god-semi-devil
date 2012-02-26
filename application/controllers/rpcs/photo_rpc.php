@@ -101,7 +101,7 @@ class Photo_rpc extends CI_Controller {
     log_message('warning', 'photo rpc response: '.json_encode($response_content));
     $response = array(
       array('action_result' => $action_result,
-            'content' => array($response_content, 'array')),
+            'content' => array($response_content, 'struct')),
       'struct');
 
     return $this->xmlrpc->send_response($response);
