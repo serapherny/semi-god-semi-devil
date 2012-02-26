@@ -4,8 +4,13 @@
 
 <h2 class="clr_l">已有照片列表</h2>
 <ul>
-  <?php foreach($photo_list as $photo_entry):?>
-    <li><?php $this->load->view('ent/photo_li', $photo_entry);?></li>
+  <?php foreach($photo_list as $photo):?>
+   <li> (<?php echo $photo->get('sid');?>)
+        <?php echo $photo->get('file_path');?>/<?php echo $photo->get('file_name');?>
+        <?php echo $photo->get('file_ext');?>,
+        <?php echo $photo->get('author');?>,
+        <?php echo anchor($photo->addr(), '点击查看');?>,
+        <?php echo $photo->get('create_time');?></li>
   <?php endforeach;?>
 </ul>
 
