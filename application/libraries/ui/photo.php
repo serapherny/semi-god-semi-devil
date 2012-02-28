@@ -9,10 +9,8 @@ class :ui:photo extends :x:element {
   protected function prepare() {
     $photo_id = $this->getAttribute('photo_id');
     $photo_model = $this->loader->model('ent/photo_model');
-    if ($photo_model->get_photo_data($photo_id, &$response) == 'suc') {
-      $this->photo = new Photo();
-      $this->photo->load_array($response[0], array());
-    }
+    $photo_ents = $photo_model->get_ents($photo_id);
+    $this->photo = $photo_ents[$photo_id];
   }
 
   public function render() {

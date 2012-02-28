@@ -147,7 +147,7 @@ abstract class Ent_model extends CI_Model {
       $query = $this->db->insert($this->tableName(), $entry);
       $this->db->flush_cache();
       // generate the report.
-      if (isset($report[$ent->get('sid')]) && 
+      if (isset($report[$ent->get('sid')]) &&
       	  ($report[$ent->get('sid')]  == 'deleted')) {
         $report[$ent->get('sid')] = 'covered';
       } else {

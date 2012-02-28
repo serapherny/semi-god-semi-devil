@@ -215,6 +215,7 @@ abstract class :x:composable-element extends :x:base {
           if (:x:base::$ENABLE_VALIDATION) {
             $child->validateChildren();
           }
+          $child->_prepare();
           $child = $child->render();
         } while ($child instanceof :x:element);
 
@@ -573,7 +574,8 @@ abstract class :x:primitive extends :x:composable-element {
 abstract class :x:element extends :x:composable-element {
 
   protected
-    $loader;
+    $loader,
+    $prepared;
 
   protected function init() {
     $this->loader = $GLOBALS['loader'];
@@ -581,7 +583,7 @@ abstract class :x:element extends :x:composable-element {
 
   protected function prepare() {}
 
-  public function _prepare() {
+  final public function _prepare() {
     if (!isset($this->prepared) || $this->prepared == false) {
       $this->prepare();
       $this->prepared = true;
@@ -589,13 +591,12 @@ abstract class :x:element extends :x:composable-element {
   }
 
   final public function __toString() {
+    $this->_prepare();
     $that = $this;
-
     if (:x:base::$ENABLE_VALIDATION) {
       // Validate the current object
       $that->validateChildren();
 
-      $that->_prepare();
       // And each intermediary object it returns
       while (($that = $that->render()) instanceof :x:element) {
         $that->_prepare();
@@ -607,7 +608,6 @@ abstract class :x:element extends :x:composable-element {
         throw new XHPCoreRenderException($this, $that);
       }
     } else {
-      $that->_prepare();
       // Skip the above checks when not validating
       while (($that = $that->render()) instanceof :x:element) {
         $that->_prepare();

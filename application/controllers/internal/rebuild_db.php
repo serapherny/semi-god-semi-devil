@@ -84,8 +84,8 @@ class Rebuild_db extends CI_Controller {
     // Create photo table.
     $this->rebuild_table('photo');
 
-    // Create poll table.
-    $this->rebuild_table('poll');
+    // Create item table.
+    $this->rebuild_table('item');
   }
 
   public function index() {
