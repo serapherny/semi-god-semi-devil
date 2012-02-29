@@ -86,6 +86,18 @@ class Rebuild_db extends CI_Controller {
 
     // Create item table.
     $this->rebuild_table('item');
+
+    // Create item list table.
+    $this->rebuild_table('item_list');
+
+    // Create post table.
+    $this->rebuild_table('post');
+
+    // Create comment table.
+    $this->rebuild_table('comment');
+
+    // Create tag table.
+    $this->rebuild_table('tag');
   }
 
   public function index() {

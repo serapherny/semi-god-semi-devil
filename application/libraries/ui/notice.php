@@ -13,7 +13,7 @@ class :ui:notice extends :x:element {
     if ($type == 'error') {
       $root->addClass('color_red');
     } else {
-      $root->addClass('color_olive');
+      $root->addClass('color_green');
     }
     return $root;
   }

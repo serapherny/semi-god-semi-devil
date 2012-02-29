@@ -3,11 +3,27 @@
 require_once LIB.'base/ent.php';
 
 class Tag extends Ent {
-  
-  private
-    $creater_ = NOT_SET;
-  
   public function __construct() {
     parent::__construct();
+    $this->set_type(EntType::EntTag);
+  }
+
+  public function BaseFieldsArray() {
+    return array_merge(
+      array('author',
+          	'create_time',
+          	'title',
+          	'subtitle'),
+    parent::BaseFieldsArray()
+    );
+  }
+
+  public function ZipFieldsArray($zipped) {
+    if ($zipped){
+      $fields = array('subtaglist');
+    } else {
+      $fields = array('subtags');
+    }
+    return $fields;
   }
 }

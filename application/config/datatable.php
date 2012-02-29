@@ -158,3 +158,181 @@ $config['item_table_fields']	=  array(
 
 $config['item_table_primary_keys'] = array();
 $config['item_table_keys'] = array();
+
+/*
+|--------------------------------------------------------------------------
+| config semi_item_list fields configuration.
+|--------------------------------------------------------------------------
+|
+*/
+$config['item_list_table_fields']	=  array(
+
+  'sid'           => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+),
+
+  'create_time'   => array(
+                           'type'        => 'BIGINT'
+),
+
+  'author'        => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16',
+                           'null'        => TRUE
+),
+
+  'taglist'          => array(
+                           'type'        => 'TEXT',
+                           'null'        => TRUE
+),
+
+  'itemlist'        => array(
+                           'type'        => 'TEXT',
+                           'null'        => TRUE
+),
+// All other information that cannot be used as a search key.
+// Stored using JSON in this field, including:,
+// ...
+  'item_list_info'     => array(
+                           'type'        => 'TEXT',
+                           'null'	     => TRUE
+)
+);
+
+$config['item_list_table_primary_keys'] = array();
+$config['item_list_table_keys'] = array();
+
+
+
+/*
+|--------------------------------------------------------------------------
+| config semi_tag fields configuration.
+|--------------------------------------------------------------------------
+|
+*/
+$config['tag_table_fields']	=  array(
+
+  'sid'           => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+),
+
+  'create_time'   => array(
+                           'type'        => 'BIGINT'
+),
+
+  'author'        => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16',
+                           'null'        => TRUE
+),
+
+  'subtaglist'          => array(
+                           'type'        => 'TEXT',
+                           'null'        => TRUE
+),
+
+// All other information that cannot be used as a search key.
+// Stored using JSON in this field, including:,
+// ...
+  'tag_info'     => array(
+                           'type'        => 'TEXT',
+                           'null'	     => TRUE
+)
+);
+
+$config['tag_table_primary_keys'] = array();
+$config['tag_table_keys'] = array();
+
+
+/*
+ |--------------------------------------------------------------------------
+| config semi_comment fields configuration.
+|--------------------------------------------------------------------------
+|
+*/
+$config['comment_table_fields']	=  array(
+
+  'sid'           => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+),
+
+  'target'        => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+),
+
+  'create_time'   => array(
+                           'type'        => 'BIGINT'
+),
+
+  'author'        => array(
+                           'type'        => 'VARCHAR',
+                           'constraint'  => '16'
+),
+
+  'commentlist'    => array(
+                           'type'        => 'TEXT',
+                           'null'        => TRUE
+),
+
+// All other information that cannot be used as a search key.
+// Stored using JSON in this field, including:,
+// ...
+  'comment_info'     => array(
+                           'type'        => 'TEXT',
+                           'null'	     => TRUE
+)
+);
+
+$config['comment_table_primary_keys'] = array();
+$config['comment_table_keys'] = array();
+
+/*
+|--------------------------------------------------------------------------
+| config semi_post fields configuration.
+|--------------------------------------------------------------------------
+|
+*/
+$config['post_table_fields']	=  array(
+
+	'sid'           => array(
+  					         'type'        => 'VARCHAR',
+                             'constraint'  => '16'
+),
+
+	'content_type'  => array(
+                            'type'        => 'TEXT',
+),
+
+	'content'  => array(
+                            'type'        => 'TEXT',
+),
+
+	'create_time'   => array(
+							'type'        => 'BIGINT'
+),
+
+	'author'        => array(
+                              'type'        => 'VARCHAR',
+                              'constraint'  => '16'
+),
+
+    'commentlist'    => array(
+                              'type'        => 'TEXT',
+                              'null'        => TRUE
+),
+
+// All other information that cannot be used as a search key.
+// Stored using JSON in this field, including:,
+// ...
+    'post_info'     => array(
+                              'type'        => 'TEXT',
+                              'null'	     => TRUE
+)
+);
+
+$config['post_table_primary_keys'] = array();
+$config['post_table_keys'] = array();
