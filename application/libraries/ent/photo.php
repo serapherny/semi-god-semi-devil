@@ -40,9 +40,9 @@ class Photo extends Ent {
   }
 
   public function addr() {
-    return '../'.$this->file_path_.'/'.
-           $this->file_name_.
-           $this->file_ext_;
+    return base_url($this->file_path_.'/'.
+                    $this->file_name_.
+                    $this->file_ext_);
   }
 
   // for validations:

@@ -16,7 +16,7 @@ class :ui:photo extends :x:element {
   public function render() {
     $photo = $this->photo;
     return <a href={$photo->addr()}>
-             <img src={$photo->addr()} width={rand(300,600)} />
+             <img src={$photo->addr()} />
            </a>;
   }
 }

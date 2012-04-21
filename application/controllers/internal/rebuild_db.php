@@ -78,6 +78,12 @@ class Rebuild_db extends CI_Controller {
     $this->db->query('use ' . $dbname);
     $this->notify('info', '成功连接到新数据库!');
 
+    $this->load->helper('url');
+    $url = site_url('internal/test_init');
+    echo <div class="float_r">
+           <a href={$url}>建立测试数据</a>
+         </div>;
+
     // Create user table.
     $this->rebuild_table('user');
 
@@ -98,6 +104,7 @@ class Rebuild_db extends CI_Controller {
 
     // Create tag table.
     $this->rebuild_table('tag');
+
   }
 
   public function index() {

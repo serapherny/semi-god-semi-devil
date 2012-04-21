@@ -1,0 +1,15 @@
+#waterfall {
+  width: 100%;
+}
+
+.item-box {
+	width: 268px;
+	border: black 1px solid;
+	margin: 10px;
+	overflow: hidden;
+}
+
+.item-box img {
+	width: 268px;
+}
+

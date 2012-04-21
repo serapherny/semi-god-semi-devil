@@ -65,7 +65,7 @@ class Photo_model extends Ent_model {
 
       // For the cases that file are not successfully created.
       if (!$written) {
-        return 'failed: not able to file:'.
+        return 'failed: not able to write file:'.
                $file_path.'/'.$file_name.$file_ext;
       }
 

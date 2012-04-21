@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once LIB.'base/ent.php';
-require_once LIB.'ent/device.php';
 
 class User extends Ent {
 

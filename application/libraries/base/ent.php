@@ -10,8 +10,9 @@ class EntType {
   const EntTag = 5;
   const EntDevice = 6;
   const EntItem = 7;
+  const EntPost = 8;
 
-  const NextEnt = 8;
+  const NextEnt = 9;
 
   public static function GetEntType($index) {
     $mapper = array(
@@ -21,7 +22,8 @@ class EntType {
       4 => 'EntComment',
       5 => 'EntTag',
       6 => 'EntDevice',
-      7 => 'EntItem'
+      7 => 'EntItem',
+      8 => 'EntPost'
     );
     if ($index >= len($mapper) && $index > 0) {
       return 'NOT_VALID';
@@ -180,7 +182,7 @@ class Ent {
       $this->ent_type_ = $type;
     } else {
       log_message('warning', 'Setting invalid ent type.');
-      }
+    }
     return $this;
   }
 

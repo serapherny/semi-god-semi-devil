@@ -43,13 +43,20 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 |
 */
 define('LIB',         APPPATH.'libraries/');
+define('CONTROLLER',  APPPATH.'controllers/');
 define('MODEL',       APPPATH.'models/');
-define('STATIC_DIR',  '/semi-god-semi-devil/static/');
+define('ROOT',        '/semi-god-semi-devil/');
+define('STATIC_DIR',  ROOT.'static/');
 define('IMG',         STATIC_DIR.'images/');
 define('CSS',         STATIC_DIR.'css/');
-define('JS',          STATIC_DIR.'js');
+define('JS',          STATIC_DIR.'js/');
 
 require_once LIB.'xhp/init.php';
+
+require_once LIB.'static_util/header_manager.php';
+require_static('style.css');
+
+define('JQUERY',      'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

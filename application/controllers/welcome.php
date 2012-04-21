@@ -1,13 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+require_once CONTROLLER.'base/abstract_page.php';
 
-	public function index()
-	{
-	    $this->load->view('header', array('page_title'=>'欢迎（网站建设中）'));
-		$this->load->view('welcome_message');
-		$this->load->view('footer');
-	}
+class Welcome extends AbstractPage {
+  public function index() {
+    set_page_title('Welcome');
+    echo <ui:page_skeleton>
+          {$this->getHeader()}
+          {$this->getContent()}
+        </ui:page_skeleton>;
+  }
 }
 
 /* End of file welcome.php */
